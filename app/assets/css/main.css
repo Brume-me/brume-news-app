@@ -43,3 +43,6 @@
   --color-red-950: oklch(18.51% 0.065 16.91);
 }
 
+h1, h2, h3 {
+  text-wrap: balance;
+}
