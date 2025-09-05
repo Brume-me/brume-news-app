@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const articles = {
   principal: {
-    url: '/articles/manifestation-paris',
+    url: '/article/manifestation-paris',
     title: 'Manifestation à Paris contre la réforme X, des milliers de participants',
     category: 'Politique',
     date: '2025-09-05',
@@ -13,7 +13,7 @@ const articles = {
   },
   secondary: [
     {
-      url: '/articles/technologie-ia',
+      url: '/article/technologie-ia',
       title: 'Les avancées récentes en intelligence artificielle',
       category: 'Technologie',
       date: '2025-09-04',
@@ -21,7 +21,7 @@ const articles = {
       alt: 'Illustration d’un cerveau numérique'
     },
     {
-      url: '/articles/coupe-monde-2026',
+      url: '/article/coupe-monde-2026',
       title: 'La Coupe du monde 2026 se prépare',
       category: 'Sport',
       date: '2025-08-28',
@@ -31,7 +31,7 @@ const articles = {
   ],
   others: [
     {
-      url: '/articles/intelligence-artificielle',
+      url: '/article/intelligence-artificielle',
       title: 'Intelligence artificielle: promesses et risques',
       category: 'Technologie',
       date: '2025-09-01',
@@ -39,7 +39,7 @@ const articles = {
       alt: 'Un robot humanoïde devant un ordinateur'
     },
     {
-      url: '/articles/culture-festival',
+      url: '/article/culture-festival',
       title: 'Un nouveau festival culturel à Lyon',
       category: 'Culture',
       date: '2025-08-20',
@@ -47,7 +47,7 @@ const articles = {
       alt: 'Public assistant à un concert en plein air'
     },
     {
-      url: '/articles/economie-europe',
+      url: '/article/economie-europe',
       title: 'L’Europe face au ralentissement économique',
       category: 'Économie',
       date: '2025-08-30',
@@ -55,7 +55,7 @@ const articles = {
       alt: 'Billets d’euros posés sur un graphique financier'
     },
     {
-      url: '/articles/climat-rapport',
+      url: '/article/climat-rapport',
       title: 'Nouveau rapport alarmant sur le climat',
       category: 'Environnement',
       date: '2025-09-02',
@@ -63,7 +63,7 @@ const articles = {
       alt: 'Forêt en feu avec fumée dense'
     },
     {
-      url: '/articles/sciences-espace',
+      url: '/article/sciences-espace',
       title: 'Découverte d’une exoplanète habitable',
       category: 'Sciences',
       date: '2025-09-03',
@@ -71,7 +71,7 @@ const articles = {
       alt: 'Planète bleue dans l’espace'
     },
     {
-      url: '/articles/sante-vaccin',
+      url: '/article/sante-vaccin',
       title: 'Un nouveau vaccin prometteur testé en Europe',
       category: 'Santé',
       date: '2025-08-25',
