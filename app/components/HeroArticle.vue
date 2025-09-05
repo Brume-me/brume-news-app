@@ -34,7 +34,7 @@ const props = defineProps<Props>();
         />
       </figure>
 
-      <header class="absolute bottom-6 left-4 bg-white px-6 py-4">
+      <header class="absolute right-6 bottom-8 left-6 max-w-xl bg-white px-6 py-4 text-pretty sm:right-auto">
         <div class="flex flex-wrap items-center justify-between">
           <h4 v-if="props.category" class="text-sm font-semibold text-gray-700">
             {{ props.category }}

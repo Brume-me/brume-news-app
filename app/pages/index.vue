@@ -2,7 +2,7 @@
 const articles = {
   principal: {
     url: '/articles/manifestation-paris',
-    title: 'Manifestation à Paris contre la réforme X',
+    title: 'Manifestation à Paris contre la réforme X, des milliers de participants',
     category: 'Politique',
     date: '2025-09-05',
     image:
