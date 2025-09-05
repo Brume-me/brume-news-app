@@ -7,25 +7,14 @@ interface Props {
   image: string;
   alt?: string;
   size?: 'md' | 'lg';
+  excerpt?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  size: 'md'
-});
-
-const sizeClass = computed(() => {
-  switch (props.size) {
-    case 'md':
-      return 'h-44';
-    case 'lg':
-    default:
-      return 'h-64';
-  }
-});
+const props = defineProps<Props>();
 </script>
 
 <template>
-  <article class="article-card" itemscope itemtype="https://schema.org/NewsArticle">
+  <article class="article-card relative" itemscope itemtype="https://schema.org/NewsArticle">
     <NuxtLink
       :to="props.url"
       class="block outline-none focus-visible:ring-2"
@@ -36,8 +25,7 @@ const sizeClass = computed(() => {
         <img
           :src="props.image"
           :alt="props.alt || props.title"
-          class="w-full object-cover"
-          :class="sizeClass"
+          class="h-[28rem] w-full object-cover"
           width="600"
           height="400"
           loading="lazy"
@@ -46,7 +34,7 @@ const sizeClass = computed(() => {
         />
       </figure>
 
-      <header class="p-1">
+      <header class="absolute bottom-6 left-4 bg-white px-6 py-4">
         <div class="flex flex-wrap items-center justify-between">
           <h4 v-if="props.category" class="text-sm font-semibold text-gray-700">
             {{ props.category }}
@@ -72,6 +60,8 @@ const sizeClass = computed(() => {
         >
           {{ props.title }}
         </h2>
+
+        <p v-if="props.excerpt" class="mt-1 text-gray-500" aria-hidden="true">{{ props.excerpt }}</p>
       </header>
     </NuxtLink>
   </article>
