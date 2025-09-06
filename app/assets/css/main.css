@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -45,6 +46,27 @@
 
 h1,
 h2,
+h3,
+h4,
+h5,
+h6,
+blockquote {
+  @apply text-balance;
+}
+
+h1,
+h2 {
+  @apply font-display;
+}
+
+h2 {
+  @apply text-2xl font-semibold md:text-3xl;
+}
+
 h3 {
-  text-wrap: balance;
+  @apply text-xl font-semibold md:text-2xl;
+}
+
+h4 {
+  @apply text-lg font-semibold md:text-xl;
 }

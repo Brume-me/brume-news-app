@@ -5,6 +5,7 @@ interface Props {
   id: string;
   url: string;
   title: string;
+  as: string;
   category: string;
   date: string;
   image: string;
@@ -13,7 +14,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'md'
+  size: 'md',
+  as: 'h2'
 });
 
 const titleId = computed(() => `card-title-${props.id}`);
@@ -54,20 +56,17 @@ const displayDate = computed(() =>
             {{ props.category }}
           </span>
 
-          <span class="hidden text-gray-500 sm:inline">•</span>
+          <span class="text-gray-500 max-sm:hidden">&bull;</span>
 
           <time :datetime="props.date" itemprop="datePublished" class="text-gray-500">
             {{ displayDate }}
           </time>
         </div>
 
-        <h2
-          :id="titleId"
-          class="font-display line-clamp-3 text-lg font-semibold text-balance text-gray-900 md:text-xl"
-          itemprop="headline"
-        >
+        <component :is="as" :id="titleId" class="line-clamp-3" itemprop="headline">
           {{ props.title }}
-        </h2>
+        </component>
+
         <!-- Optionnel :
         <meta itemprop="dateModified" content="2025-09-06" />
         <span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Auteur"></span>

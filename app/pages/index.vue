@@ -96,11 +96,11 @@ const articles = {
     <HeroArticle :key="articles.principal.url" v-bind="articles.principal" />
 
     <section class="grid gap-4 sm:grid-cols-2">
-      <ArticleCard v-for="article in articles.secondary" :key="article.url" v-bind="article" size="lg" />
+      <ArticleCard as="h3" v-for="article in articles.secondary" :key="article.url" v-bind="article" size="lg" />
     </section>
 
     <section class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-      <ArticleCard v-for="article in articles.others" :key="article.url" v-bind="article" />
+      <ArticleCard as="h4" v-for="article in articles.others" :key="article.url" v-bind="article" />
     </section>
   </section>
 </template>

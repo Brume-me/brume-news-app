@@ -67,11 +67,7 @@ const displayDate = computed(() =>
             </time>
           </div>
 
-          <h2
-            :id="titleId"
-            class="font-display text-2xl leading-tight font-bold text-balance sm:text-3xl"
-            itemprop="headline"
-          >
+          <h2 :id="titleId" itemprop="headline">
             {{ props.title }}
           </h2>
 
