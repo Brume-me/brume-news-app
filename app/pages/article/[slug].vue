@@ -48,7 +48,7 @@ const nextArticles = [
 </script>
 
 <template>
-  <article class="mx-auto mb-16 max-w-3xl">
+  <article class="mx-auto mb-16 max-w-[70ch]">
     <header>
       <figure class="mb-8">
         <img

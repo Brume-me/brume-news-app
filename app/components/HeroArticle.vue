@@ -1,68 +1,89 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
+  id: string;
   url: string;
   title: string;
   category?: string;
   date: string;
   image: string;
   alt?: string;
-  size?: 'md' | 'lg';
   excerpt?: string;
 }
 
 const props = defineProps<Props>();
+
+const titleId = computed(() => `hero-title-${props.id}`);
+const metaId = computed(() => `hero-meta-${props.id}`);
+
+const displayDate = computed(() =>
+  new Date(props.date).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  })
+);
 </script>
 
 <template>
   <article class="article-card relative" itemscope itemtype="https://schema.org/NewsArticle">
     <NuxtLink
       :to="props.url"
-      class="block outline-none focus-visible:ring-2"
-      :aria-labelledby="`card-title-${props.title}`"
-      itemprop="mainEntityOfPage"
+      class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+      :aria-labelledby="titleId"
+      :aria-describedby="metaId"
+      itemprop="url"
     >
-      <figure class="mb-2">
-        <img
-          :src="props.image"
-          :alt="props.alt || props.title"
-          class="h-[28rem] w-full object-cover"
-          width="600"
-          height="400"
-          loading="lazy"
-          decoding="async"
-          itemprop="image"
-        />
-      </figure>
-
-      <header class="absolute right-6 bottom-8 left-6 max-w-xl bg-white px-6 py-4 text-pretty sm:right-auto">
-        <div class="flex flex-wrap items-center justify-between">
-          <h4 v-if="props.category" class="text-sm font-semibold text-gray-700">
-            {{ props.category }}
-          </h4>
-
-          <p class="text-sm text-gray-400">
-            <time :datetime="props.date" itemprop="datePublished">
-              {{
-                new Date(props.date).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
-                })
-              }}
-            </time>
-          </p>
+      <figure class="relative mb-2 overflow-hidden">
+        <div class="aspect-[16/9] w-full">
+          <img
+            :src="props.image"
+            :alt="props.alt || props.title"
+            class="h-full w-full object-cover"
+            width="1600"
+            height="900"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            itemprop="image"
+            :srcset="`${props.image} 800w, ${props.image} 1200w, ${props.image} 1600w`"
+            :sizes="`(min-width: 1024px) 1024px, 100vw`"
+          />
         </div>
 
-        <h2
-          :id="`card-title-${props.title}`"
-          class="font-display text-xl font-semibold text-gray-900"
-          itemprop="headline"
+        <header
+          class="pointer-events-none absolute right-6 bottom-6 left-6 max-w-xl bg-white px-6 py-4 text-pretty sm:right-auto"
         >
-          {{ props.title }}
-        </h2>
+          <div :id="metaId" class="mb-2 flex flex-wrap items-center gap-x-3 text-sm">
+            <span v-if="props.category" class="font-semibold text-gray-700" itemprop="articleSection">
+              {{ props.category }}
+            </span>
 
-        <p v-if="props.excerpt" class="mt-1 text-gray-500" aria-hidden="true">{{ props.excerpt }}</p>
-      </header>
+            <span class="hidden sm:inline">•</span>
+
+            <time :datetime="props.date" itemprop="datePublished" class="text-gray-500">
+              {{ displayDate }}
+            </time>
+          </div>
+
+          <h2
+            :id="titleId"
+            class="font-display text-2xl leading-tight font-bold text-balance sm:text-3xl"
+            itemprop="headline"
+          >
+            {{ props.title }}
+          </h2>
+
+          <p v-if="props.excerpt" class="mt-2 line-clamp-3 text-sm text-gray-500" itemprop="description">
+            {{ props.excerpt }}
+          </p>
+
+          <!-- Optionnel :
+          <meta itemprop="dateModified" content="2025-09-06" />
+          -->
+        </header>
+      </figure>
     </NuxtLink>
   </article>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const articles = {
   principal: {
+    id: 'manifestation-paris',
     url: '/article/manifestation-paris',
     title: 'Manifestation à Paris contre la réforme X, des milliers de participants',
     category: 'Politique',
@@ -13,6 +14,7 @@ const articles = {
   },
   secondary: [
     {
+      id: 'technologie-ia',
       url: '/article/technologie-ia',
       title: 'Les avancées récentes en intelligence artificielle',
       category: 'Technologie',
@@ -21,6 +23,7 @@ const articles = {
       alt: 'Illustration d’un cerveau numérique'
     },
     {
+      id: 'coupe-monde-2026',
       url: '/article/coupe-monde-2026',
       title: 'La Coupe du monde 2026 se prépare',
       category: 'Sport',
@@ -31,6 +34,7 @@ const articles = {
   ],
   others: [
     {
+      id: 'intelligence-artificielle',
       url: '/article/intelligence-artificielle',
       title: 'Intelligence artificielle: promesses et risques',
       category: 'Technologie',
@@ -39,6 +43,7 @@ const articles = {
       alt: 'Un robot humanoïde devant un ordinateur'
     },
     {
+      id: 'culture-festival',
       url: '/article/culture-festival',
       title: 'Un nouveau festival culturel à Lyon',
       category: 'Culture',
@@ -47,6 +52,7 @@ const articles = {
       alt: 'Public assistant à un concert en plein air'
     },
     {
+      id: 'economie-europe',
       url: '/article/economie-europe',
       title: 'L’Europe face au ralentissement économique',
       category: 'Économie',
@@ -55,6 +61,7 @@ const articles = {
       alt: 'Billets d’euros posés sur un graphique financier'
     },
     {
+      id: 'climat-rapport',
       url: '/article/climat-rapport',
       title: 'Nouveau rapport alarmant sur le climat',
       category: 'Environnement',
@@ -63,6 +70,7 @@ const articles = {
       alt: 'Forêt en feu avec fumée dense'
     },
     {
+      id: 'sciences-espace',
       url: '/article/sciences-espace',
       title: 'Découverte d’une exoplanète habitable',
       category: 'Sciences',
@@ -71,6 +79,7 @@ const articles = {
       alt: 'Planète bleue dans l’espace'
     },
     {
+      id: 'sante-vaccin',
       url: '/article/sante-vaccin',
       title: 'Un nouveau vaccin prometteur testé en Europe',
       category: 'Santé',
@@ -83,7 +92,7 @@ const articles = {
 </script>
 
 <template>
-  <section class="grid grid-cols-12 gap-x-4 gap-y-8">
+  <section class="grid grid-cols-12 gap-6">
     <HeroArticle :key="articles.principal.url" v-bind="articles.principal" class="col-span-12" />
 
     <ArticleCard

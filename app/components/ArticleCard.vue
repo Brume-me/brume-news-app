@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
+  id: string;
   url: string;
   title: string;
-  category?: string;
+  category: string;
   date: string;
   image: string;
   alt?: string;
@@ -13,24 +16,22 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'md'
 });
 
-const sizeClass = computed(() => {
-  switch (props.size) {
-    case 'md':
-      return 'h-44';
-    case 'lg':
-    default:
-      return 'h-64';
-  }
-});
+const titleId = computed(() => `card-title-${props.id}`);
+const metaId = computed(() => `card-meta-${props.id}`);
+const sizeClass = computed(() => props.size === 'lg' ? 'aspect-[16/9]' : 'aspect-[3/2]');
+const displayDate = computed(() =>
+  new Date(props.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+);
 </script>
 
 <template>
   <article class="article-card" itemscope itemtype="https://schema.org/NewsArticle">
     <NuxtLink
       :to="props.url"
-      class="block outline-none focus-visible:ring-2"
-      :aria-labelledby="`card-title-${props.title}`"
-      itemprop="mainEntityOfPage"
+      class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2""
+      :aria-labelledby="titleId"
+      :aria-describedby="metaId"
+      itemprop="url"
     >
       <figure class="mb-2">
         <img
@@ -47,31 +48,29 @@ const sizeClass = computed(() => {
       </figure>
 
       <header class="p-1">
-        <div class="flex flex-wrap items-center justify-between">
-          <h4 v-if="props.category" class="text-sm font-semibold text-gray-700">
+        <div :id="metaId" class="flex flex-wrap items-center justify-between">
+          <p v-if="props.category" class="text-sm font-semibold text-gray-700" itemprop="articleSection">
             {{ props.category }}
-          </h4>
+          </p>
 
-          <p class="text-sm text-gray-400">
+          <p class="text-sm text-gray-500">
             <time :datetime="props.date" itemprop="datePublished">
-              {{
-                new Date(props.date).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
-                })
-              }}
+              {{ displayDate }}
             </time>
           </p>
         </div>
 
         <h2
-          :id="`card-title-${props.title}`"
-          class="font-display text-xl font-semibold text-gray-900"
+          :id="titleId"
+          class="font-display line-clamp-2 text-xl font-semibold text-balance text-gray-900"
           itemprop="headline"
         >
           {{ props.title }}
         </h2>
+        <!-- Optionnel :
+        <meta itemprop="dateModified" content="2025-09-06" />
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Auteur"></span>
+        -->
       </header>
     </NuxtLink>
   </article>
