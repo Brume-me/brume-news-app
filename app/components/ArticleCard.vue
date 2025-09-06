@@ -31,6 +31,7 @@ const displayDate = computed(() =>
       class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       :aria-labelledby="titleId"
       :aria-describedby="metaId"
+      :title="props.title"
       itemprop="url"
     >
       <figure class="mb-2">
@@ -62,7 +63,7 @@ const displayDate = computed(() =>
 
         <h2
           :id="titleId"
-          class="font-display line-clamp-2 text-xl font-semibold text-balance text-gray-900"
+          class="font-display line-clamp-3 text-lg font-semibold text-balance text-gray-900 md:text-xl"
           itemprop="headline"
         >
           {{ props.title }}

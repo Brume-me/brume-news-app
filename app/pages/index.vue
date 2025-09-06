@@ -72,7 +72,7 @@ const articles = {
     {
       id: 'sciences-espace',
       url: '/article/sciences-espace',
-      title: 'Découverte d’une exoplanète habitable',
+      title: "Découverte d’une exoplanète habitable, c'est la big news. Tout le monde en parle !",
       category: 'Sciences',
       date: '2025-09-03',
       image: 'https://placehold.co/600x400',
@@ -95,11 +95,11 @@ const articles = {
   <section class="flex flex-col gap-8">
     <HeroArticle :key="articles.principal.url" v-bind="articles.principal" />
 
-    <section class="grid grid-cols-2 gap-4">
+    <section class="grid gap-4 sm:grid-cols-2">
       <ArticleCard v-for="article in articles.secondary" :key="article.url" v-bind="article" size="lg" />
     </section>
 
-    <section class="grid grid-cols-3 gap-4">
+    <section class="grid grid-cols-2 gap-4 sm:grid-cols-3">
       <ArticleCard v-for="article in articles.others" :key="article.url" v-bind="article" />
     </section>
   </section>

@@ -36,7 +36,7 @@ const displayDate = computed(() =>
       itemprop="url"
     >
       <figure class="relative mb-2 overflow-hidden">
-        <div class="aspect-[16/9] w-full">
+        <div class="aspect-[16/9] min-h-96 w-full">
           <img
             :src="props.image"
             :alt="props.alt || props.title"
