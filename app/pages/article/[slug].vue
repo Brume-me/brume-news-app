@@ -5,6 +5,7 @@ const route = useRoute();
 const slug = route.params.slug;
 const nextArticles = [
   {
+    id: 'intelligence-artificielle',
     url: '/article/intelligence-artificielle',
     title: 'Intelligence artificielle: promesses et risques',
     category: 'Technologie',
@@ -13,6 +14,7 @@ const nextArticles = [
     alt: 'Un robot humanoïde devant un ordinateur'
   },
   {
+    id: 'culture-festival',
     url: '/article/culture-festival',
     title: 'Un nouveau festival culturel à Lyon',
     category: 'Culture',
@@ -21,6 +23,7 @@ const nextArticles = [
     alt: 'Public assistant à un concert en plein air'
   },
   {
+    id: 'economie-europe',
     url: '/article/economie-europe',
     title: 'L’Europe face au ralentissement économique',
     category: 'Économie',
@@ -29,6 +32,7 @@ const nextArticles = [
     alt: 'Billets d’euros posés sur un graphique financier'
   },
   {
+    id: 'climat-rapport',
     url: '/article/climat-rapport',
     title: 'Nouveau rapport alarmant sur le climat',
     category: 'Environnement',
@@ -37,6 +41,7 @@ const nextArticles = [
     alt: 'Forêt en feu avec fumée dense'
   },
   {
+    id: 'sciences-espace',
     url: '/article/sciences-espace',
     title: 'Découverte d’une exoplanète habitable',
     category: 'Sciences',
@@ -100,6 +105,6 @@ const nextArticles = [
   </article>
 
   <div class="grid grid-cols-4 gap-4">
-    <ArticleCard v-for="(article, i) in nextArticles" :key="article.url" v-bind="article" size="lg" />
+    <ArticleCard v-for="article in nextArticles" :key="article.url" v-bind="article" />
   </div>
 </template>

@@ -92,17 +92,15 @@ const articles = {
 </script>
 
 <template>
-  <section class="grid grid-cols-12 gap-6">
-    <HeroArticle :key="articles.principal.url" v-bind="articles.principal" class="col-span-12" />
+  <section class="flex flex-col gap-8">
+    <HeroArticle :key="articles.principal.url" v-bind="articles.principal" />
 
-    <ArticleCard
-      v-for="(article, i) in articles.secondary"
-      :key="article.url"
-      v-bind="article"
-      class="col-span-6"
-      size="lg"
-    />
+    <section class="grid grid-cols-2 gap-4">
+      <ArticleCard v-for="article in articles.secondary" :key="article.url" v-bind="article" size="lg" />
+    </section>
 
-    <ArticleCard v-for="(article, i) in articles.others" :key="article.url" v-bind="article" class="col-span-4" />
+    <section class="grid grid-cols-3 gap-4">
+      <ArticleCard v-for="article in articles.others" :key="article.url" v-bind="article" />
+    </section>
   </section>
 </template>

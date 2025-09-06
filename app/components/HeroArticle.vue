@@ -55,12 +55,12 @@ const displayDate = computed(() =>
         <header
           class="pointer-events-none absolute right-6 bottom-6 left-6 max-w-xl bg-white px-6 py-4 text-pretty sm:right-auto"
         >
-          <div :id="metaId" class="mb-2 flex flex-wrap items-center gap-x-3 text-sm">
+          <div :id="metaId" class="mb-2 flex flex-wrap items-center gap-x-2 text-sm">
             <span v-if="props.category" class="font-semibold text-gray-700" itemprop="articleSection">
               {{ props.category }}
             </span>
 
-            <span class="hidden sm:inline">•</span>
+            <span class="hidden text-gray-500 sm:inline">•</span>
 
             <time :datetime="props.date" itemprop="datePublished" class="text-gray-500">
               {{ displayDate }}

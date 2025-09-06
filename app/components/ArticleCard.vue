@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const titleId = computed(() => `card-title-${props.id}`);
 const metaId = computed(() => `card-meta-${props.id}`);
-const sizeClass = computed(() => props.size === 'lg' ? 'aspect-[16/9]' : 'aspect-[3/2]');
+const sizeClass = computed(() => (props.size === 'lg' ? 'aspect-[16/9]' : 'aspect-[3/2]'));
 const displayDate = computed(() =>
   new Date(props.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
 );
@@ -28,7 +28,7 @@ const displayDate = computed(() =>
   <article class="article-card" itemscope itemtype="https://schema.org/NewsArticle">
     <NuxtLink
       :to="props.url"
-      class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2""
+      class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       :aria-labelledby="titleId"
       :aria-describedby="metaId"
       itemprop="url"
@@ -48,16 +48,16 @@ const displayDate = computed(() =>
       </figure>
 
       <header class="p-1">
-        <div :id="metaId" class="flex flex-wrap items-center justify-between">
-          <p v-if="props.category" class="text-sm font-semibold text-gray-700" itemprop="articleSection">
+        <div :id="metaId" class="mb-1 flex flex-wrap items-center gap-x-2 text-sm">
+          <span v-if="props.category" class="font-semibold text-gray-700" itemprop="articleSection">
             {{ props.category }}
-          </p>
+          </span>
 
-          <p class="text-sm text-gray-500">
-            <time :datetime="props.date" itemprop="datePublished">
-              {{ displayDate }}
-            </time>
-          </p>
+          <span class="hidden text-gray-500 sm:inline">•</span>
+
+          <time :datetime="props.date" itemprop="datePublished" class="text-gray-500">
+            {{ displayDate }}
+          </time>
         </div>
 
         <h2
