@@ -18,3 +18,15 @@ export async function getArticle(slug: string) {
 }
 
 export const getArticles = async () => await client.fetch('*[_type == "article"]');
+
+export const getArticlesToRead = async (currentArticleId: string) =>
+  await client.fetch(
+    `*[_type == "article" && defined(slug.current) && _id != $currentArticleId]|order(publishedAt desc)[0...12]`,
+    { currentArticleId }
+  );
+
+export const getCategoryArticles = async (categorySlug: string) =>
+  await client.fetch(
+    `*[_type == "article" && $categorySlug in categories[]->slug.current] | order(publishedAt desc)[0...12]`,
+    { categorySlug }
+  );

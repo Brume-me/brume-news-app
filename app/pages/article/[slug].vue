@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getArticle, getImage } from '@/sanity-client';
+import { getArticle, getArticlesToRead, getImage } from '@/sanity-client';
 import { toHTML } from '@portabletext/to-html';
 import { useQuery } from '@tanstack/vue-query';
 import { useRoute } from 'nuxt/app';
@@ -9,11 +9,20 @@ const slug = route.params.slug as string;
 
 const {
   data: article,
-  isLoading,
-  error
+  isLoading: isLoadingArticle,
+  error: isErrorArticle
 } = useQuery({
   queryKey: ['article', slug],
   queryFn: () => getArticle(slug)
+});
+
+const {
+  data: articlesToRead,
+  isLoading: isLoadingArticlesToRead,
+  error: isErrorArticlesToRead
+} = useQuery({
+  queryKey: ['articlesToRead'],
+  queryFn: () => getArticlesToRead(article.value._id)
 });
 
 const publishedDate = computed(() => {
@@ -58,10 +67,21 @@ const publishedDate = computed(() => {
   </article>
 
   <nav aria-labelledby="continue-reading">
-    <h2 id="continue-reading" class="mb-4">Continuer à lire</h2>
+    <h2 id="to-read-continue" class="mb-4">Continuer à lire</h2>
 
     <div class="grid grid-cols-3 gap-4">
-      <!-- <ArticleCard as="h3" v-for="article in articlesToRead" :key="article.url" v-bind="article" /> -->
+      <ArticleCard
+        as="h4"
+        v-for="article in articlesToRead"
+        :key="article.url"
+        :id="article._id"
+        :url="`/article/${article.slug.current}`"
+        :title="article.title"
+        category="toDefined"
+        :date="article.publishedAt"
+        :image="getImage(article.image).url()"
+        :alt="article.title"
+      />
     </div>
   </nav>
 </template>
