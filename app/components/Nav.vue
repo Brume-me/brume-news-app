@@ -1,21 +1,34 @@
 <script setup lang="ts">
+import { getTopCategories } from '@/sanity-client';
+import { useQuery } from '@tanstack/vue-query';
+
 interface Props {
   showBrand?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), { showBrand: false });
+
+const { data, isLoading } = useQuery({
+  queryKey: ['topCategories'],
+  queryFn: getTopCategories,
+  staleTime: 5 * 60_000,
+  gcTime: 15 * 60_000
+});
+
+const topCategories = computed(() => data.value ?? []);
 </script>
 
 <template>
-  <nav class="sticky top-0 z-50 flex items-center justify-between bg-white px-12 py-3">
-    <NuxtLink to="/" class="text-xl font-bold text-gray-900" v-if="props.showBrand" :aria-hidden="!props.showBrand">
-      Papela
-    </NuxtLink>
+  <nav class="sticky top-0 z-50 bg-white py-3">
+    <ul class="flex items-center gap-8 overflow-x-hidden px-4 font-medium text-gray-700 lg:justify-center">
+      <li class="mr-6" v-if="props.showBrand" :aria-hidden="!props.showBrand">
+        <NuxtLink to="/" class="text-xl font-bold text-gray-900"> Papela </NuxtLink>
+      </li>
 
-    <ul class="flex gap-6 text-sm font-medium text-gray-700">
-      <li><NuxtLink to="/" class="hover:text-blue-600">Accueil</NuxtLink></li>
-      <li><NuxtLink to="/politique" class="hover:text-blue-600">Politique</NuxtLink></li>
-      <li><NuxtLink to="/sport" class="hover:text-blue-600">Sport</NuxtLink></li>
-      <li><NuxtLink to="/culture" class="hover:text-blue-600">Culture</NuxtLink></li>
+      <li v-for="category in topCategories" :key="category._id">
+        <NuxtLink :to="`/${category.slug.current}`" class="font-semibold whitespace-nowrap hover:text-blue-600">{{
+          category.title
+        }}</NuxtLink>
+      </li>
     </ul>
   </nav>
 </template>

@@ -40,3 +40,15 @@ export const getCategoryArticles = async (categorySlug: string) =>
     `*[_type == "article" && $categorySlug in categories[]->slug.current] | order(publishedAt desc)[0...12]`,
     { categorySlug }
   );
+
+export const getTopCategories = async () =>
+  client.fetch(`*[_type == "category"]{
+    _id,
+    title,
+    slug,
+    "articleCount": count(*[
+      _type == "article"
+      && !(_id in path("drafts.**"))
+      && references(^._id)
+    ])
+  } | order(articleCount desc, title asc)[0...8]`);
