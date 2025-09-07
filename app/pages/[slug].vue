@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCategoryArticles, getImage } from '@/sanity-client';
+import { getArticlesByCategory, getCategory, getImage } from '@/sanity-client';
 import { toHTML } from '@portabletext/to-html';
 import { useQuery } from '@tanstack/vue-query';
 import { useRoute } from 'nuxt/app';
@@ -8,14 +8,22 @@ const route = useRoute();
 const categorySlug = route.params.slug as string;
 
 const {
+  data: category,
+  isLoading: isLoadingCategory,
+  error: isErrorCategory
+} = useQuery({
+  queryKey: ['category', categorySlug],
+  queryFn: () => getCategory(categorySlug)
+});
+
+const {
   data: articles,
   isLoading: isLoadingArticles,
   error: isErrorArticles
 } = useQuery({
-  queryKey: ['categoryArticles', categorySlug],
-  queryFn: () => getCategoryArticles(categorySlug),
-  staleTime: 1000 * 60 * 5,
-  gcTime: 1000 * 60 * 15
+  queryKey: ['categoryArticles', category.value?._id],
+  queryFn: () => getArticlesByCategory(category.value._id),
+  enabled: computed(() => !!category.value?._id)
 });
 </script>
 

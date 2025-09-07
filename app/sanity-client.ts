@@ -13,12 +13,22 @@ const imageBuilder = imageUrlBuilder(client);
 
 export const getImage = (image: SanityImageSource) => imageBuilder.image(image);
 
-export async function getArticle(slug: string) {
+export const getArticle = async (slug: string) => {
   return await client.fetch(`*[_type == "article" && slug.current == $slug][0]`, { slug });
-}
+};
 
-export const getArticles = async () =>
-  client.fetch(`*[_type=="article"]{
+export const getCategory = async (slug: string) => {
+  return await client.fetch(`*[_type == "category" && slug.current == $slug][0]`, { slug });
+};
+
+export const getArticles = async (excludeArticleId?: string) => {
+  let query = '*[_type == "article" && defined(slug.current)';
+
+  if (excludeArticleId) {
+    query += ' && _id != $excludeArticleId';
+  }
+
+  query += `]{
     _id,
     title,
     slug,
@@ -27,19 +37,23 @@ export const getArticles = async () =>
     "categories": categories[]->{
       _id, title, slug
     }
-  } | order(publishedAt desc)`);
+  } | order(publishedAt desc)`;
 
-export const getArticlesToRead = async (currentArticleId: string) =>
-  await client.fetch(
-    `*[_type == "article" && defined(slug.current) && _id != $currentArticleId]|order(publishedAt desc)[0...12]`,
-    { currentArticleId }
-  );
+  const params = excludeArticleId ? { excludeArticleId } : {};
+  return await client.fetch(query, params);
+};
 
-export const getCategoryArticles = async (categorySlug: string) =>
-  await client.fetch(
-    `*[_type == "article" && $categorySlug in categories[]->slug.current] | order(publishedAt desc)[0...12]`,
-    { categorySlug }
-  );
+export const getArticlesByCategory = async (categoryId: string, excludeArticleId?: string) => {
+  let query = '*[_type == "article" && defined(slug.current) && categories[0]._ref == $categoryId';
+  if (excludeArticleId) {
+    query += ' && _id != $excludeArticleId';
+  }
+
+  query += ']|order(publishedAt desc)[0...12]';
+
+  const params = excludeArticleId ? { categoryId, excludeArticleId } : { categoryId };
+  return await client.fetch(query, params);
+};
 
 export const getTopCategories = async () =>
   client.fetch(`*[_type == "category"]{

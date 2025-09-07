@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getArticle, getArticlesToRead, getImage } from '@/sanity-client';
+import { getArticle, getArticles, getArticlesByCategory, getImage } from '@/sanity-client';
 import { toHTML } from '@portabletext/to-html';
 import { useQuery } from '@tanstack/vue-query';
 import { useRoute } from 'nuxt/app';
@@ -13,22 +13,38 @@ const {
   error: isErrorArticle
 } = useQuery({
   queryKey: ['article', slug],
-  queryFn: () => getArticle(slug)
+  queryFn: () => getArticle(slug),
+  staleTime: 1000 * 60 * 5,
+  gcTime: 1000 * 60 * 15
 });
 
 const {
-  data: articlesToRead,
-  isLoading: isLoadingArticlesToRead,
-  error: isErrorArticlesToRead
+  data: categoryArticles,
+  isLoading: isLoadingCategoryArticle,
+  error: isErrorCategoryArticle
 } = useQuery({
-  queryKey: ['articlesToRead'],
-  queryFn: () => getArticlesToRead(article.value._id)
+  queryKey: ['categoryArticles', article.value?.categories[0]._ref, article.value?._id],
+  queryFn: () => getArticlesByCategory(article.value.categories[0]._ref, article.value._id),
+  enabled: computed(() => !!article.value?.categories[0]?._ref && !!article.value?._id)
 });
 
-const publishedDate = computed(() => {
-  if (!article.value?.publishedAt) return null;
-  return new Date(article.value.publishedAt);
+const {
+  data: flashArticles,
+  isLoading: isLoadingFlashArticles,
+  error: isErrorFlashArticles
+} = useQuery({
+  queryKey: ['flashArticles', article.value?._id],
+  queryFn: () => getArticles(article.value._id),
+  enabled: computed(() => !!article.value?._id)
 });
+
+const displayDate = computed(() =>
+  new Date(article?.value.publishedAt).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+);
 </script>
 
 <template>
@@ -41,8 +57,8 @@ const publishedDate = computed(() => {
       <h1>{{ article.title }}</h1>
 
       <p class="mb-4 text-gray-500">
-        <time :datetime="publishedDate?.toISOString().split('T')" itemprop="datePublished">
-          {{ publishedDate?.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+        <time :datetime="article.publishedAt" itemprop="datePublished">
+          {{ displayDate }}
         </time>
         —
         <span itemprop="author" itemscope itemtype="https://schema.org/Person">
@@ -66,13 +82,32 @@ const publishedDate = computed(() => {
     </footer>
   </article>
 
-  <nav aria-labelledby="continue-reading">
-    <h2 id="to-read-continue" class="mb-4">Continuer à lire</h2>
+  <nav aria-labelledby="category-read-list">
+    <h2 id="category-read-list" class="mb-4">Dans la même catégorie</h2>
 
     <div class="grid grid-cols-3 gap-4">
       <ArticleCard
         as="h4"
-        v-for="article in articlesToRead"
+        v-for="article in categoryArticles"
+        :key="article.url"
+        :id="article._id"
+        :url="`/article/${article.slug.current}`"
+        :title="article.title"
+        category="toDefined"
+        :date="article.publishedAt"
+        :image="getImage(article.image).url()"
+        :alt="article.title"
+      />
+    </div>
+  </nav>
+
+  <nav aria-labelledby="flash-read-list">
+    <h2 id="flash-read-list" class="mb-4">À la une</h2>
+
+    <div class="grid grid-cols-3 gap-4">
+      <ArticleCard
+        as="h4"
+        v-for="article in flashArticles"
         :key="article.url"
         :id="article._id"
         :url="`/article/${article.slug.current}`"
