@@ -56,7 +56,7 @@ const displayDate = computed(() =>
             {{ props.category }}
           </span>
 
-          <span class="text-gray-500 max-sm:hidden">&bull;</span>
+          <span v-if="props.category" class="text-gray-500 max-sm:hidden">•</span>
 
           <time :datetime="props.date" itemprop="datePublished" class="text-gray-500">
             {{ displayDate }}
