@@ -13,14 +13,6 @@ const imageBuilder = imageUrlBuilder(client);
 
 export const getImage = (image: SanityImageSource) => imageBuilder.image(image);
 
-export async function getPosts() {
-  return await client.fetch('*[_type == "article"]');
-}
-
-export async function createPost(post: any) {
-  return client.create(post);
-}
-
-export async function updateDocumentTitle(_id: any, title: any) {
-  return client.patch(_id).set({ title });
+export async function getArticle(slug: string) {
+  return await client.fetch(`*[_type == "article" && slug.current == $slug][0]`, { slug });
 }

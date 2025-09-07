@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@portabletext/to-html": "^3.0.0",
     "@sanity/client": "^7.11.0",
     "@sanity/image-url": "^1.2.0",
     "@tailwindcss/vite": "^4.1.13",
