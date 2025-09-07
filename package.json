@@ -10,8 +10,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@sanity/client": "^7.11.0",
+    "@sanity/image-url": "^1.2.0",
     "@tailwindcss/vite": "^4.1.13",
-    "nuxt": "^4.1.0",
+    "@tanstack/vue-query": "^5.87.1",
+    "nuxt": "^4.1.1",
     "nuxt-phosphor-icons": "2.3.2",
     "tailwindcss": "^4.1.13",
     "vue": "^3.5.20",
