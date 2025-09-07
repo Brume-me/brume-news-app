@@ -35,7 +35,7 @@ const displayDate = computed(() =>
       :aria-describedby="metaId"
       itemprop="url"
     >
-      <figure class="relative mb-2 overflow-hidden">
+      <figure class="relative overflow-hidden">
         <div class="aspect-[16/9] min-h-96 w-full">
           <img
             :src="props.image"

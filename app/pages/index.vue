@@ -2,26 +2,52 @@
 import { getArticles, getImage } from '@/sanity-client';
 import { useQuery } from '@tanstack/vue-query';
 
-const {
-  data: articles,
-  isLoading,
-  error
-} = useQuery({
+const { data, isLoading } = useQuery({
   queryKey: ['articles'],
   queryFn: getArticles,
-  staleTime: 1000 * 60 * 5,
-  gcTime: 1000 * 60 * 15
+  staleTime: 5 * 60_000,
+  gcTime: 15 * 60_000
 });
 
-const heroArticle = computed(() => articles.value?.[0]);
-const secondaryArticles = computed(() => articles.value?.slice(1, 3) || []);
-const otherArticles = computed(() => articles.value?.slice(3) || []);
+const articles = computed(() => data.value ?? []);
+
+const heroArticle = computed(() => articles.value[0]);
+const secondaryArticles = computed(() => articles.value.slice(1, 3));
+const otherArticles = computed(() => articles.value.slice(3));
 </script>
 
 <template>
-  <section v-if="articles?.length" class="flex flex-col gap-8">
+  <section v-if="isLoading" class="flex flex-col gap-8">
+    <Skeleton class="aspect-[16/9] min-h-96 w-full" />
+
+    <section class="grid gap-4 sm:grid-cols-2">
+      <div v-for="i in 2" :key="'sec-skel-' + i">
+        <Skeleton class="mb-2 aspect-[16/9] w-full" />
+
+        <div class="flex flex-col gap-1 p-1">
+          <Skeleton class="h-4 w-36" />
+          <Skeleton class="h-7 w-3/4" />
+          <Skeleton class="h-7 w-1/2" />
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+      <div v-for="i in 8" :key="'other-skel-' + i">
+        <Skeleton class="mb-2 aspect-[16/9] w-full" />
+
+        <div class="flex flex-col gap-1 p-1">
+          <Skeleton class="h-4 w-36" />
+          <Skeleton class="h-5 w-3/4" />
+          <Skeleton class="h-5 w-1/2" />
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section v-else-if="articles.length" class="flex flex-col gap-8">
     <HeroArticle
-      :key="heroArticle.slug.current"
+      :key="heroArticle._id"
       :id="heroArticle._id"
       :url="`/article/${heroArticle.slug.current}`"
       :title="heroArticle.title"
@@ -29,14 +55,14 @@ const otherArticles = computed(() => articles.value?.slice(3) || []);
       :date="heroArticle.publishedAt"
       :image="getImage(heroArticle.image).url()"
       :alt="heroArticle.title"
-      :excerpt="heroArticle.excerpt || 'Fake description en attente d\'avoir le field de dispo'"
+      :excerpt="heroArticle.excerpt"
     />
 
-    <section class="grid gap-4 sm:grid-cols-2" v-if="articles.length > 1">
+    <section class="grid gap-4 sm:grid-cols-2" v-if="secondaryArticles.length">
       <ArticleCard
         as="h3"
         v-for="article in secondaryArticles"
-        :key="article.url"
+        :key="article._id"
         :id="article._id"
         :url="`/article/${article.slug.current}`"
         :title="article.title"
@@ -48,11 +74,11 @@ const otherArticles = computed(() => articles.value?.slice(3) || []);
       />
     </section>
 
-    <section class="grid grid-cols-2 gap-4 sm:grid-cols-3" v-if="articles.length > 3">
+    <section class="grid grid-cols-2 gap-4 sm:grid-cols-3" v-if="otherArticles.length">
       <ArticleCard
         as="h4"
         v-for="article in otherArticles"
-        :key="article.url"
+        :key="article._id"
         :id="article._id"
         :url="`/article/${article.slug.current}`"
         :title="article.title"
