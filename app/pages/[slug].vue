@@ -1,30 +1,13 @@
 <script setup lang="ts">
-import { getArticlesByCategory, getCategory, getImage } from '@/sanity-client';
-import { toHTML } from '@portabletext/to-html';
-import { useQuery } from '@tanstack/vue-query';
+import { getArticlesByCategory, getImage } from '@/sanity-client';
 import { useRoute } from 'nuxt/app';
 
 const route = useRoute();
 const categorySlug = route.params.slug as string;
 
-const {
-  data: category,
-  isLoading: isLoadingCategory,
-  error: isErrorCategory
-} = useQuery({
-  queryKey: ['category', categorySlug],
-  queryFn: () => getCategory(categorySlug)
-});
-
-const {
-  data: articles,
-  isLoading: isLoadingArticles,
-  error: isErrorArticles
-} = useQuery({
-  queryKey: ['categoryArticles', category.value?._id],
-  queryFn: () => getArticlesByCategory(category.value._id),
-  enabled: computed(() => !!category.value?._id)
-});
+const { data: articles } = await useAsyncData(`category-articles-${categorySlug}`, () =>
+  getArticlesByCategory(categorySlug)
+);
 </script>
 
 <template>
@@ -36,7 +19,7 @@ const {
       :id="article._id"
       :url="`/article/${article.slug.current}`"
       :title="article.title"
-      category="toDefined"
+      :category="article.categories?.[0]?.title"
       :date="article.publishedAt"
       :image="getImage(article.image).url()"
       :alt="article.title"

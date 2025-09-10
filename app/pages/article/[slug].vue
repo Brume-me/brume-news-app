@@ -1,42 +1,18 @@
 <script setup lang="ts">
 import { getArticle, getArticles, getArticlesByCategory, getImage } from '@/sanity-client';
 import { toHTML } from '@portabletext/to-html';
-import { useQuery } from '@tanstack/vue-query';
 import { useRoute } from 'nuxt/app';
 
 const route = useRoute();
 const slug = route.params.slug as string;
 
-const {
-  data: article,
-  isLoading: isLoadingArticle,
-  error: isErrorArticle
-} = useQuery({
-  queryKey: ['article', slug],
-  queryFn: () => getArticle(slug),
-  staleTime: 1000 * 60 * 5,
-  gcTime: 1000 * 60 * 15
-});
+const { data: article } = await useAsyncData(`article-${slug}`, () => getArticle(slug));
 
-const {
-  data: categoryArticles,
-  isLoading: isLoadingCategoryArticle,
-  error: isErrorCategoryArticle
-} = useQuery({
-  queryKey: ['categoryArticles', article.value?.categories[0]._ref, article.value?._id],
-  queryFn: () => getArticlesByCategory(article.value.categories[0]._ref, article.value._id),
-  enabled: computed(() => !!article.value?.categories[0]?._ref && !!article.value?._id)
-});
+const { data: categoryArticles } = await useAsyncData(`category-articles-${slug}`, () =>
+  getArticlesByCategory(article.value.categories[0].slug.current, article.value._id)
+);
 
-const {
-  data: flashArticles,
-  isLoading: isLoadingFlashArticles,
-  error: isErrorFlashArticles
-} = useQuery({
-  queryKey: ['flashArticles', article.value?._id],
-  queryFn: () => getArticles(article.value._id),
-  enabled: computed(() => !!article.value?._id)
-});
+const { data: flashArticles } = await useAsyncData(`flash-articles-${slug}`, () => getArticles(article.value._id));
 
 const displayDate = computed(() =>
   new Date(article?.value.publishedAt).toLocaleDateString('fr-FR', {
@@ -55,6 +31,8 @@ const displayDate = computed(() =>
       </figure>
 
       <h1>{{ article.title }}</h1>
+
+      <p>{{ article.categories.map((category) => category.title).join(' | ') }}</p>
 
       <p class="mb-4 text-gray-500">
         <time :datetime="article.publishedAt" itemprop="datePublished">
@@ -82,7 +60,7 @@ const displayDate = computed(() =>
     </footer>
   </article>
 
-  <nav aria-labelledby="category-read-list">
+  <nav v-if="categoryArticles.length" aria-labelledby="category-read-list" class="mb-8">
     <h2 id="category-read-list" class="mb-4">Dans la même catégorie</h2>
 
     <div class="grid grid-cols-3 gap-4">
@@ -93,7 +71,7 @@ const displayDate = computed(() =>
         :id="article._id"
         :url="`/article/${article.slug.current}`"
         :title="article.title"
-        category="toDefined"
+        :category="article.categories?.[0]?.title"
         :date="article.publishedAt"
         :image="getImage(article.image).url()"
         :alt="article.title"
@@ -112,7 +90,7 @@ const displayDate = computed(() =>
         :id="article._id"
         :url="`/article/${article.slug.current}`"
         :title="article.title"
-        category="toDefined"
+        :category="article.categories?.[0]?.title"
         :date="article.publishedAt"
         :image="getImage(article.image).url()"
         :alt="article.title"

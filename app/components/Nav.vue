@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import { getTopCategories } from '@/sanity-client';
-import { useQuery } from '@tanstack/vue-query';
 
 interface Props {
   showBrand?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), { showBrand: false });
 
-const { data, isLoading } = useQuery({
-  queryKey: ['topCategories'],
-  queryFn: getTopCategories,
-  staleTime: 5 * 60_000,
-  gcTime: 15 * 60_000
-});
-
-const topCategories = computed(() => data.value ?? []);
+const { data: topCategories } = await useAsyncData('top-categories', () => getTopCategories());
 </script>
 
 <template>
@@ -25,9 +17,13 @@ const topCategories = computed(() => data.value ?? []);
       </li>
 
       <li v-for="category in topCategories" :key="category._id">
-        <NuxtLink :to="`/${category.slug.current}`" class="font-semibold whitespace-nowrap hover:text-blue-600">{{
-          category.title
-        }}</NuxtLink>
+        <NuxtLink
+          :to="`/${category.slug.current}`"
+          class="font-semibold whitespace-nowrap"
+          exact-active-class="bg-gray-100"
+        >
+          {{ category.title }}
+        </NuxtLink>
       </li>
     </ul>
   </nav>
