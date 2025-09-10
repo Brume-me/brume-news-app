@@ -6,7 +6,7 @@ interface Props {
   url: string;
   title: string;
   as: string;
-  category: string;
+  category?: string;
   date: string;
   image: string;
   alt?: string;

@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { getArticlesByCategory, getImage } from '@/sanity-client';
+import { getArticles, getImage } from '@/sanity-client';
 import { useRoute } from 'nuxt/app';
 
 const route = useRoute();
 const categorySlug = route.params.slug as string;
 
-const { data: articles } = await useAsyncData(`category-articles-${categorySlug}`, () =>
-  getArticlesByCategory(categorySlug)
-);
+const { data: articles } = await useList(`category-articles:${categorySlug}`, () => getArticles({ categorySlug }));
+
+if (!articles.value?.length) {
+  throw createError({ statusCode: 404, statusMessage: 'Catégorie introuvable' });
+}
 </script>
 
 <template>
   <section class="grid grid-cols-2 gap-4 sm:grid-cols-3" v-if="articles">
     <ArticleCard
-      as="h4"
+      as="h3"
       v-for="article in articles"
       :key="article.url"
       :id="article._id"

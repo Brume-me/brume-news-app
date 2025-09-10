@@ -1,21 +1,32 @@
 <script setup lang="ts">
-import { getArticle, getArticles, getArticlesByCategory, getImage } from '@/sanity-client';
+import { getArticle, getArticles, getImage } from '@/sanity-client';
 import { toHTML } from '@portabletext/to-html';
 import { useRoute } from 'nuxt/app';
 
 const route = useRoute();
 const slug = route.params.slug as string;
 
-const { data: article } = await useAsyncData(`article-${slug}`, () => getArticle(slug));
+const { data } = await useItem(`article:${slug}`, () => getArticle(slug));
 
-const { data: categoryArticles } = await useAsyncData(`category-articles-${slug}`, () =>
-  getArticlesByCategory(article.value.categories[0].slug.current, article.value._id)
+const article = computed(() => {
+  if (!data.value) {
+    throw createError({ statusCode: 404, statusMessage: 'Article introuvable' });
+  }
+  return data.value;
+});
+
+const primaryCategorySlug = computed(() => article.value.categories?.[0]?.slug.current);
+
+const { data: categoryArticles } = await useList(`category-articles:${slug}`, () =>
+  getArticles({ categorySlug: primaryCategorySlug.value, excludeArticleId: article.value._id })
 );
 
-const { data: flashArticles } = await useAsyncData(`flash-articles-${slug}`, () => getArticles(article.value._id));
+const { data: flashArticles } = await useList(`flash-articles:${slug}`, () =>
+  getArticles({ excludeArticleId: article.value._id })
+);
 
 const displayDate = computed(() =>
-  new Date(article?.value.publishedAt).toLocaleDateString('fr-FR', {
+  new Date(article.value.publishedAt).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -32,7 +43,7 @@ const displayDate = computed(() =>
 
       <h1>{{ article.title }}</h1>
 
-      <p>{{ article.categories.map((category) => category.title).join(' | ') }}</p>
+      <p v-if="article.categories">{{ article.categories.map((category) => category.title).join(' | ') }}</p>
 
       <p class="mb-4 text-gray-500">
         <time :datetime="article.publishedAt" itemprop="datePublished">

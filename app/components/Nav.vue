@@ -6,7 +6,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), { showBrand: false });
 
-const { data: topCategories } = await useAsyncData('top-categories', () => getTopCategories());
+const { data: topCategories } = await useList('top-categories', () => getTopCategories());
 </script>
 
 <template>

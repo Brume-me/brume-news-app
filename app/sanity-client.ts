@@ -1,3 +1,4 @@
+import type { Article, Category } from '@/types/sanity';
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
@@ -10,80 +11,76 @@ export const client = createClient({
 });
 
 const imageBuilder = imageUrlBuilder(client);
-
 export const getImage = (image: SanityImageSource) => imageBuilder.image(image);
 
-export const getArticle = async (slug: string) => {
-  return await client.fetch(
-    `*[_type == "article" && slug.current == $slug][0]{
-      _id,
-      title,
-      slug,
-      image,
-      publishedAt,
-      excerpt,
-      body,
-      "categories": categories[]->{
-        _id,
-        title,
-        slug
-      }
-    }`,
-    { slug }
-  );
-};
-
-export const getArticles = async (excludeArticleId?: string) => {
-  let query = '*[_type == "article" && defined(slug.current)';
-
-  if (excludeArticleId) {
-    query += ' && _id != $excludeArticleId';
+const ARTICLE_PROJECTION = `
+  _id,
+  title,
+  slug,
+  publishedAt,
+  image,
+  excerpt,
+  body,
+  "categories": categories[]->{
+    _id, title, slug
   }
+`;
 
-  query += `]{
-    _id,
-    title,
-    slug,
-    publishedAt,
-    image,
-    "categories": categories[]->{
-      _id, title, slug
-    }
-  } | order(publishedAt desc)`;
-
-  const params = excludeArticleId ? { excludeArticleId } : {};
-  return await client.fetch(query, params);
+export const getArticle = async (slug: string): Promise<Article | null> => {
+  const query = `*[
+    _type == "article"
+    && defined(slug.current)
+    && slug.current == $slug
+    && !(_id in path("drafts.**"))
+  ][0]{ ${ARTICLE_PROJECTION} }`;
+  return client.fetch<Article | null>(query, { slug });
 };
 
-export const getArticlesByCategory = async (slug: string, excludeArticleId?: string) => {
-  let query = '*[_type == "article" && defined(slug.current) && $slug in categories[]->slug.current';
-  if (excludeArticleId) {
-    query += ' && _id != $excludeArticleId';
-  }
-
-  query += `]{
-    _id,
-    title,
-    slug,
-    publishedAt,
-    image,
-    "categories": categories[]->{
-      _id, title, slug
-    }
-  }|order(publishedAt desc)[0...12]`;
-
-  const params = excludeArticleId ? { slug, excludeArticleId } : { slug };
-  return await client.fetch(query, params);
+type ListArticlesParams = {
+  categorySlug?: string;
+  excludeArticleId?: string;
+  limit?: number;
+  offset?: number;
 };
 
-export const getTopCategories = async () =>
-  client.fetch(`*[_type == "category"]{
+export const getArticles = async (options: ListArticlesParams = {}): Promise<Article[]> => {
+  const { categorySlug, excludeArticleId, limit = 12, offset = 0 } = options;
+
+  const baseFilter = `
+    _type == "article"
+    && defined(slug.current)
+    && !(_id in path("drafts.**"))
+    ${excludeArticleId ? '&& _id != $excludeArticleId' : ''}
+  `;
+
+  const categoryFilter = categorySlug ? '&& $categorySlug in categories[]->slug.current' : '';
+
+  const query = `*[
+    ${baseFilter}
+    ${categoryFilter}
+  ] | order(publishedAt desc) [${offset}...${offset + limit}]{
+    ${ARTICLE_PROJECTION}
+  }`;
+
+  const params: Record<string, unknown> = {};
+  if (excludeArticleId) params.excludeArticleId = excludeArticleId;
+  if (categorySlug) params.categorySlug = categorySlug;
+
+  return client.fetch<Article[]>(query, params);
+};
+
+export const getTopCategories = async (): Promise<Category[]> => {
+  const query = `*[_type == "category"]{
     _id,
     title,
     slug,
     "articleCount": count(*[
-      _type == "article"
+      _type == "article" 
+      && defined(slug.current)
       && !(_id in path("drafts.**"))
       && references(^._id)
     ])
-  } | order(articleCount desc, title asc)[0...8]`);
+  } | order(articleCount desc, title asc)[0...8]`;
+
+  return client.fetch<Category[]>(query);
+};
