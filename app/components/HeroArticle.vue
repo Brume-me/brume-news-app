@@ -67,9 +67,9 @@ const displayDate = computed(() =>
             </time>
           </div>
 
-          <h2 :id="titleId" itemprop="headline">
+          <h1 :id="titleId" itemprop="headline">
             {{ props.title }}
-          </h2>
+          </h1>
 
           <p v-if="props.excerpt" class="mt-2 line-clamp-3 text-sm text-gray-500" itemprop="description">
             {{ props.excerpt }}
