@@ -44,6 +44,34 @@
   --color-red-950: oklch(18.51% 0.065 16.91);
 }
 
+body, #__nuxt {
+  color: var(--fg);
+  background-color: var(--bg);
+}
+
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+}
+
+/* Thèmes alternatifs */
+:root[data-theme="dark"] {
+  --bg: #000000;
+  --fg: #ffffff;
+}
+
+:root[data-theme="sepia"] {
+  --bg: #f4ecd8;
+  --fg: #5b4636;
+}
+
+:root[data-theme="solarized"] {
+  --bg: #002b36;
+  --fg: #93a1a1;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 h1,
 h2,
 h3,

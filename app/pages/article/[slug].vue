@@ -35,7 +35,7 @@ const displayDate = computed(() =>
 </script>
 
 <template>
-  <article v-if="article" class="prose md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[70ch]">
+  <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[70ch]">
     <header>
       <figure class="mb-8">
         <img v-if="article.image" :src="getImage(article.image).width(1200).url()" alt="" />
@@ -45,7 +45,7 @@ const displayDate = computed(() =>
 
       <p v-if="article.categories">{{ article.categories.map((category) => category.title).join(' | ') }}</p>
 
-      <p class="mb-4 text-gray-500">
+      <p class="mb-4 text-[var(--fg)]/60">
         <time :datetime="article.publishedAt" itemprop="datePublished">
           {{ displayDate }}
         </time>
