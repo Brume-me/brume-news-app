@@ -53,16 +53,16 @@ const displayDate = computed(() =>
         </div>
 
         <header
-          class="pointer-events-none absolute right-6 bottom-6 left-6 max-w-xl bg-[var(--bg)] px-6 py-4 text-pretty sm:right-auto"
+          class="pointer-events-none absolute right-6 bottom-6 left-6 max-w-xl bg-(--bg) px-6 py-4 text-pretty sm:right-auto"
         >
           <div :id="metaId" class="mb-2 flex flex-wrap items-center gap-x-2 text-sm">
-            <span v-if="props.category" class="font-semibold text-[var(--fg)]/70" itemprop="articleSection">
+            <span v-if="props.category" class="font-semibold text-(--fg)/70" itemprop="articleSection">
               {{ props.category }}
             </span>
 
-            <span v-if="props.category" class="hidden text-[var(--fg)]/60 sm:inline">•</span>
+            <span v-if="props.category" class="text-[--fg)/60 hidden sm:inline">•</span>
 
-            <time :datetime="props.date" itemprop="datePublished" class="text-[var(--fg)]/60">
+            <time :datetime="props.date" itemprop="datePublished" class="text-(--fg)/60">
               {{ displayDate }}
             </time>
           </div>
@@ -71,7 +71,7 @@ const displayDate = computed(() =>
             {{ props.title }}
           </h1>
 
-          <p v-if="props.excerpt" class="mt-2 line-clamp-3 text-sm text-[var(--fg)]/60" itemprop="description">
+          <p v-if="props.excerpt" class="mt-2 line-clamp-3 text-sm text-(--fg)/60" itemprop="description">
             {{ props.excerpt }}
           </p>
 

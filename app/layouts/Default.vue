@@ -27,7 +27,7 @@ onBeforeUnmount(() => {
       to="/"
       aria-label="Accueil"
       title="Accueil"
-      class="block p-4 text-center text-3xl font-bold text-[var(--fg)]/90"
+      class="block p-4 text-center text-3xl font-bold text-(--fg)/90"
     >
       Papela
     </NuxtLink>

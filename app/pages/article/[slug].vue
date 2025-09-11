@@ -45,7 +45,7 @@ const displayDate = computed(() =>
 
       <p v-if="article.categories">{{ article.categories.map((category) => category.title).join(' | ') }}</p>
 
-      <p class="mb-4 text-[var(--fg)]/60">
+      <p class="mb-4 text-(--fg)/60">
         <time :datetime="article.publishedAt" itemprop="datePublished">
           {{ displayDate }}
         </time>
