@@ -35,13 +35,12 @@ const otherArticles = computed(() => articles.value.slice(3));
         :date="article.publishedAt"
         :image="getImage(article.image).url()"
         :alt="article.title"
-        size="lg"
       />
     </section>
 
     <section class="grid grid-cols-2 gap-4 sm:grid-cols-3" v-if="otherArticles.length">
       <ArticleCard
-        as="h3"
+        as="h2"
         v-for="article in otherArticles"
         :key="article._id"
         :id="article._id"

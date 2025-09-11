@@ -36,12 +36,13 @@ const displayDate = computed(() =>
 
 <template>
   <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[70ch]">
-    <header>
-      <figure class="mb-8">
-        <img v-if="article.image" :src="getImage(article.image).width(1200).url()" alt="" />
+    <header class="mb-8 md:mb-16">
+      <figure>
+        <img v-if="article.image" :src="getImage(article.image).width(1200).url()" alt="article.imageAlt" />
+        <figcaption>{{ article.imageCaption }}</figcaption>
       </figure>
 
-      <h1>{{ article.title }}</h1>
+      <h1 class="text-3xl! md:text-4xl!">{{ article.title }}</h1>
 
       <p v-if="article.categories">{{ article.categories.map((category) => category.title).join(' | ') }}</p>
 
@@ -56,9 +57,9 @@ const displayDate = computed(() =>
       </p>
     </header>
 
-    <div v-html="toHTML(article.body)"></div>
+    <main v-html="toHTML(article.body)"></main>
 
-    <footer class="flex gap-2 py-4">
+    <footer class="flex gap-2">
       <button class="group flex cursor-pointer items-center gap-0.5">
         <PhosphorIcon name="arrow-fat-up" class="text-2xl group-hover:hidden" />
         <PhosphorIcon name="arrow-fat-up" weight="fill" class="text-2xl group-[:not(:hover)]:hidden" /> 1.5k
@@ -78,7 +79,7 @@ const displayDate = computed(() =>
       <ArticleCard
         as="h4"
         v-for="article in categoryArticles"
-        :key="article.url"
+        :key="article._id"
         :id="article._id"
         :url="`/article/${article.slug.current}`"
         :title="article.title"
@@ -97,7 +98,7 @@ const displayDate = computed(() =>
       <ArticleCard
         as="h4"
         v-for="article in flashArticles"
-        :key="article.url"
+        :key="article._id"
         :id="article._id"
         :url="`/article/${article.slug.current}`"
         :title="article.title"

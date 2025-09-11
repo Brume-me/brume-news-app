@@ -10,38 +10,33 @@ interface Props {
   date: string;
   image: string;
   alt?: string;
-  size?: 'md' | 'lg';
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'md',
   as: 'h2'
 });
 
 const titleId = computed(() => `card-title-${props.id}`);
 const metaId = computed(() => `card-meta-${props.id}`);
-const sizeClass = computed(() => (props.size === 'lg' ? 'aspect-[16/9]' : 'aspect-[3/2]'));
 const displayDate = computed(() =>
   new Date(props.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
 );
 </script>
 
 <template>
-  <article class="article-card" itemscope itemtype="https://schema.org/NewsArticle">
-    <NuxtLink
-      :to="props.url"
-      class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-      :aria-labelledby="titleId"
-      :aria-describedby="metaId"
-      :title="props.title"
-      itemprop="url"
-    >
-      <figure class="mb-2">
+  <NuxtLink
+    :to="props.url"
+    class="outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+    :aria-labelledby="titleId"
+    :aria-describedby="metaId"
+    itemprop="url"
+  >
+    <article class="article-card" itemscope itemtype="https://schema.org/NewsArticle">
+      <figure class="mb-2 h-full">
         <img
           :src="props.image"
           :alt="props.alt || props.title"
-          class="w-full object-cover"
-          :class="sizeClass"
+          class="aspect-[3/2] h-full w-full object-cover"
           width="600"
           height="400"
           loading="lazy"
@@ -72,6 +67,14 @@ const displayDate = computed(() =>
         <span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Auteur"></span>
         -->
       </header>
-    </NuxtLink>
-  </article>
+    </article>
+  </NuxtLink>
 </template>
+
+<style scoped>
+.expanded .article-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+</style>

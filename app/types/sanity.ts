@@ -15,7 +15,10 @@ export type Article = {
   title: string;
   slug: SanitySlug;
   url: string;
+  author: string;
   image: SanityImageSource;
+  imageCaption: string;
+  imageAlt: string;
   publishedAt: string;
   excerpt?: string;
   body: TypedObject | TypedObject[];
