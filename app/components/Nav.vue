@@ -18,7 +18,6 @@ const themes = [
 ] as const;
 
 const currentTheme = ref<'light' | 'dark' | 'beige' | 'graphite'>('light');
-const isDark = computed(() => currentTheme.value === 'dark' || currentTheme.value === 'graphite');
 const open = ref(false);
 
 function setTheme(theme: typeof currentTheme.value) {
@@ -26,7 +25,8 @@ function setTheme(theme: typeof currentTheme.value) {
   const html = document.documentElement;
   html.setAttribute('data-theme', theme);
 
-  html.classList.toggle('dark', isDark.value);
+  const isDark = theme === 'dark' || theme === 'graphite';
+  html.classList.toggle('dark', isDark);
 }
 
 watch(currentTheme, (t) => setTheme(t));
@@ -51,7 +51,7 @@ watch(currentTheme, (t) => setTheme(t));
 
       <div class="relative">
         <button @click="open = !open" class="flex items-center gap-1 rounded p-2 hover:bg-(--surface)">
-          <PhosphorIcon :name="isDark ? 'sun-dim' : 'moon'" class="text-lg" weight="fill" />
+          <PhosphorIcon name="moon" class="text-lg" weight="fill" />
         </button>
 
         <ul v-if="open" class="absolute mt-1">
