@@ -35,7 +35,7 @@ const displayDate = computed(() =>
 </script>
 
 <template>
-  <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[70ch]">
+  <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[60ch]">
     <header class="mb-8 md:mb-16">
       <figure>
         <img v-if="article.image" :src="getImage(article.image).width(1200).url()" alt="article.imageAlt" />
@@ -61,12 +61,12 @@ const displayDate = computed(() =>
 
     <footer class="flex gap-2">
       <button class="group flex cursor-pointer items-center gap-0.5">
-        <PhosphorIcon name="arrow-fat-up" class="text-2xl group-hover:hidden" />
+        <PhosphorIcon name="arrow-fat-up" weight="fill" class="text-2xl group-hover:hidden" />
         <PhosphorIcon name="arrow-fat-up" weight="fill" class="text-2xl group-[:not(:hover)]:hidden" /> 1.5k
       </button>
 
       <button class="group flex cursor-pointer items-center gap-0.5">
-        <PhosphorIcon name="arrow-fat-down" class="text-2xl group-hover:hidden" />
+        <PhosphorIcon name="arrow-fat-down" weight="fill" class="text-2xl group-hover:hidden" />
         <PhosphorIcon name="arrow-fat-down" weight="fill" class="text-2xl group-[:not(:hover)]:hidden" /> 140
       </button>
     </footer>
