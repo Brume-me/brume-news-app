@@ -9,16 +9,22 @@ const props = withDefaults(defineProps<Props>(), { showBrand: false });
 
 const { data: topCategories } = await useList('top-categories', () => getTopCategories());
 
-// Liste des thèmes
 const themes = [
-  { value: 'light', bg: '#ffffff', text: '#000000' },
-  { value: 'beige', bg: '#f5efe6', text: '#2a2520' },
-  { value: 'dark', bg: '#000000', text: '#ffffff' },
-  { value: 'graphite', bg: '#14161a', text: '#f5f7fa' }
+  { value: 'light', bg: '#ffffff', text: '#000000', icon: 'sun' },
+  { value: 'beige', bg: '#f5efe6', text: '#2a2520', icon: 'sun-dim' },
+  { value: 'graphite', bg: '#14161a', text: '#f5f7fa', icon: 'moon' },
+  { value: 'dark', bg: '#000000', text: '#ffffff', icon: 'moon-stars' }
 ] as const;
 
 const currentTheme = ref<'light' | 'dark' | 'beige' | 'graphite'>('light');
-const open = ref(false);
+const selectedTheme = computed(() => themes.find((t) => t.value === currentTheme.value) || themes[0]);
+
+const incrementTheme = () => {
+  const idx = themes.findIndex((t) => t.value === currentTheme.value);
+  const next = themes[(idx + 1) % themes.length]!;
+  setTheme(next.value);
+  currentTheme.value = next.value;
+};
 
 function setTheme(theme: typeof currentTheme.value) {
   currentTheme.value = theme;
@@ -34,7 +40,7 @@ watch(currentTheme, (t) => setTheme(t));
 
 <template>
   <nav class="sticky top-0 z-50 bg-(--bg) py-3">
-    <ul class="flex flex-wrap items-center gap-8 gap-y-2 px-4 font-medium lg:justify-center">
+    <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 font-medium text-(--fg)/80 lg:justify-center">
       <li class="mr-6" v-if="props.showBrand" :aria-hidden="!props.showBrand">
         <NuxtLink to="/" class="text-xl font-bold text-(--fg)"> Papela </NuxtLink>
       </li>
@@ -42,29 +48,16 @@ watch(currentTheme, (t) => setTheme(t));
       <li v-for="category in topCategories" :key="category._id">
         <NuxtLink
           :to="`/${category.slug.current}`"
-          class="font-semibold whitespace-nowrap text-(--fg)/80"
-          exact-active-class="bg-(--fg)/10"
+          class="px-1 py-0.5 font-semibold whitespace-nowrap"
+          exact-active-class="bg-(--fg) text-(--bg)"
         >
           {{ category.title }}
         </NuxtLink>
       </li>
 
-      <div class="relative">
-        <button @click="open = !open" class="flex items-center gap-1 rounded p-2 hover:bg-(--surface)">
-          <PhosphorIcon name="moon" class="text-lg" weight="fill" />
-        </button>
-
-        <ul v-if="open" class="absolute mt-1">
-          <li
-            v-for="t in themes"
-            :key="t.value"
-            @click="setTheme(t.value)"
-            class="group cursor-pointer bg-(--bg) p-1 text-sm text-(--fg)"
-          >
-            <div class="px-1 py-0.5 text-base" :style="{ backgroundColor: t.bg, color: t.text }">Aa</div>
-          </li>
-        </ul>
-      </div>
+      <button @click="incrementTheme" class="flex items-center gap-1 rounded p-2">
+        <PhosphorIcon :name="selectedTheme.icon" class="text-lg" weight="fill" />
+      </button>
     </ul>
   </nav>
 </template>
