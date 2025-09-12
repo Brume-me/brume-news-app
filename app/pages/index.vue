@@ -40,7 +40,7 @@ const otherArticles = computed(() => articles.value.slice(3));
 
     <section class="grid grid-cols-2 gap-4 sm:grid-cols-3" v-if="otherArticles.length">
       <ArticleCard
-        as="h2"
+        as="h3"
         v-for="article in otherArticles"
         :key="article._id"
         :id="article._id"

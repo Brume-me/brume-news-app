@@ -10,6 +10,7 @@ interface Props {
   date: string;
   image: string;
   alt?: string;
+  excerpt?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,12 +32,12 @@ const displayDate = computed(() =>
     :aria-describedby="metaId"
     itemprop="url"
   >
-    <article class="article-card" itemscope itemtype="https://schema.org/NewsArticle">
-      <figure class="mb-2 h-full">
+    <article class="article-card grid grid-cols-[11rem_1fr] gap-3" itemscope itemtype="https://schema.org/NewsArticle">
+      <figure>
         <img
           :src="props.image"
           :alt="props.alt || props.title"
-          class="aspect-[3/2] h-full w-full object-cover"
+          class="h-full min-h-28 object-cover"
           width="600"
           height="400"
           loading="lazy"
@@ -45,7 +46,7 @@ const displayDate = computed(() =>
         />
       </figure>
 
-      <header class="p-1">
+      <header class="py-1">
         <div :id="metaId" class="mb-1 flex flex-wrap items-center gap-x-2 text-sm">
           <span v-if="props.category" class="font-semibold text-(--fg)/70" itemprop="articleSection">
             {{ props.category }}
@@ -62,6 +63,9 @@ const displayDate = computed(() =>
           {{ props.title }}
         </component>
 
+        <p v-if="props.excerpt" class="mt-2 line-clamp-3 text-sm text-(--fg)/60" itemprop="description">
+          {{ props.excerpt }}
+        </p>
         <!-- Optionnel :
         <meta itemprop="dateModified" content="2025-09-06" />
         <span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Auteur"></span>
