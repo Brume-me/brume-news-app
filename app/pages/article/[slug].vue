@@ -75,38 +75,40 @@ const displayDate = computed(() =>
   <nav v-if="categoryArticles.length" aria-labelledby="category-read-list" class="mb-8">
     <h2 id="category-read-list" class="mb-4">Dans la même catégorie</h2>
 
-    <div class="grid grid-cols-3 gap-4">
-      <ArticleCard
-        as="h4"
-        v-for="article in categoryArticles"
-        :key="article._id"
-        :id="article._id"
-        :url="`/article/${article.slug.current}`"
-        :title="article.title"
-        :category="article.categories?.[0]?.title"
-        :date="article.publishedAt"
-        :image="getImage(article.image).url()"
-        :alt="article.title"
-      />
-    </div>
+    <ul class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <li v-for="article in categoryArticles">
+        <ArticleCard
+          as="h3"
+          :key="article._id"
+          :id="article._id"
+          :url="`/article/${article.slug.current}`"
+          :title="article.title"
+          :category="article.categories?.[0]?.title"
+          :date="article.publishedAt"
+          :image="getImage(article.image).url()"
+          :alt="article.title"
+        />
+      </li>
+    </ul>
   </nav>
 
   <nav aria-labelledby="flash-read-list">
     <h2 id="flash-read-list" class="mb-4">À la une</h2>
 
-    <div class="grid grid-cols-3 gap-4">
-      <ArticleCard
-        as="h4"
-        v-for="article in flashArticles"
-        :key="article._id"
-        :id="article._id"
-        :url="`/article/${article.slug.current}`"
-        :title="article.title"
-        :category="article.categories?.[0]?.title"
-        :date="article.publishedAt"
-        :image="getImage(article.image).url()"
-        :alt="article.title"
-      />
-    </div>
+    <ul class="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
+      <li v-for="article in flashArticles">
+        <ArticleCard
+          as="h3"
+          :key="article._id"
+          :id="article._id"
+          :url="`/article/${article.slug.current}`"
+          :title="article.title"
+          :category="article.categories?.[0]?.title"
+          :date="article.publishedAt"
+          :image="getImage(article.image).url()"
+          :alt="article.title"
+        />
+      </li>
+    </ul>
   </nav>
 </template>

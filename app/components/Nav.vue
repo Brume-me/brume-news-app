@@ -47,7 +47,7 @@ watch(currentTheme, (t) => setTheme(t));
 
       <li v-for="category in topCategories" :key="category._id">
         <NuxtLink
-          :to="`/${category.slug.current}`"
+          :to="`/category/${category.slug.current}`"
           class="px-1 py-0.5 font-semibold whitespace-nowrap"
           exact-active-class="bg-(--fg) text-(--bg)"
         >
