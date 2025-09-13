@@ -38,7 +38,15 @@ const displayDate = computed(() =>
   <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[60ch]">
     <header class="mb-8 md:mb-16">
       <figure>
-        <img v-if="article.image" :src="getImage(article.image).width(1200).url()" alt="article.imageAlt" />
+        <img
+          v-if="article.image"
+          :src="getImage(article.image).width(1200).height(700).url()"
+          alt="article.imageAlt"
+          width="1200"
+          height="700"
+          loading="eager"
+          fetchpriority="high"
+        />
         <figcaption>{{ article.imageCaption }}</figcaption>
       </figure>
 
