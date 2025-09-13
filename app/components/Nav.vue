@@ -55,9 +55,15 @@ watch(currentTheme, (t) => setTheme(t));
         </NuxtLink>
       </li>
 
-      <button @click="incrementTheme" class="flex items-center gap-1 rounded p-2">
-        <PhosphorIcon :name="selectedTheme.icon" class="text-lg" weight="fill" />
-      </button>
+      <div class="item-center flex">
+        <NuxtLink to="/search" class="p-2">
+          <PhosphorIcon name="magnifying-glass" class="text-lg" weight="bold" />
+        </NuxtLink>
+
+        <button @click="incrementTheme" class="p-2">
+          <PhosphorIcon :name="selectedTheme.icon" class="text-lg" weight="fill" />
+        </button>
+      </div>
     </ul>
   </nav>
 </template>
