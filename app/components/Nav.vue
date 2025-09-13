@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getTopCategories } from '@/sanity-client';
-import { ref, watch } from 'vue';
 
 interface Props {
   showBrand?: boolean;
@@ -8,34 +7,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), { showBrand: false });
 
 const { data: topCategories } = await useList('top-categories', () => getTopCategories());
-
-const themes = [
-  { value: 'light', bg: '#ffffff', text: '#000000', icon: 'sun' },
-  { value: 'beige', bg: '#f5efe6', text: '#2a2520', icon: 'sun-dim' },
-  { value: 'graphite', bg: '#14161a', text: '#f5f7fa', icon: 'moon' },
-  { value: 'dark', bg: '#000000', text: '#ffffff', icon: 'moon-stars' }
-] as const;
-
-const currentTheme = ref<'light' | 'dark' | 'beige' | 'graphite'>('light');
-const selectedTheme = computed(() => themes.find((t) => t.value === currentTheme.value) || themes[0]);
-
-const incrementTheme = () => {
-  const idx = themes.findIndex((t) => t.value === currentTheme.value);
-  const next = themes[(idx + 1) % themes.length]!;
-  setTheme(next.value);
-  currentTheme.value = next.value;
-};
-
-function setTheme(theme: typeof currentTheme.value) {
-  currentTheme.value = theme;
-  const html = document.documentElement;
-  html.setAttribute('data-theme', theme);
-
-  const isDark = theme === 'dark' || theme === 'graphite';
-  html.classList.toggle('dark', isDark);
-}
-
-watch(currentTheme, (t) => setTheme(t));
 </script>
 
 <template>
@@ -60,9 +31,7 @@ watch(currentTheme, (t) => setTheme(t));
           <PhosphorIcon name="magnifying-glass" class="text-lg" weight="bold" />
         </NuxtLink>
 
-        <button @click="incrementTheme" class="p-2">
-          <PhosphorIcon :name="selectedTheme.icon" class="text-lg" weight="fill" />
-        </button>
+        <ThemeSwitcher />
       </div>
     </ul>
   </nav>
