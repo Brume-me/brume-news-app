@@ -11,7 +11,7 @@ const { data: topCategories } = await useList('top-categories', () => getTopCate
 
 <template>
   <nav class="sticky top-0 z-50 bg-(--bg) py-3">
-    <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 font-medium text-(--fg)/80 lg:justify-center">
+    <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 font-medium text-(--fg)/80 lg:justify-center">
       <li class="mr-6" v-if="props.showBrand" :aria-hidden="!props.showBrand">
         <NuxtLink to="/" class="text-xl font-bold text-(--fg)"> Papela </NuxtLink>
       </li>

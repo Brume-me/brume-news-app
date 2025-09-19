@@ -39,12 +39,32 @@ export const getArticle = async (slug: string): Promise<Article | null> => {
 type ListArticlesParams = {
   categorySlug?: string;
   excludeArticleId?: string;
+  searchQuery?: string;
   limit?: number;
   offset?: number;
 };
 
+const createSearchFilter = (searchQuery: string) => {
+  const searchTerms = searchQuery.split(' ');
+  let queryTermsInTitle = '';
+  let queryTermsInBody = '';
+
+  searchTerms.forEach((term, index) => {
+    console.log(index, term);
+    if (index >= 1) {
+      queryTermsInTitle += '||';
+      queryTermsInBody += '||';
+    }
+
+    queryTermsInTitle += `title match "* ${term} * "`;
+    queryTermsInBody += `body[].children[].text match "* ${term} * "`;
+  });
+
+  return `&& (${queryTermsInBody} || ${queryTermsInTitle})`;
+};
+
 export const getArticles = async (options: ListArticlesParams = {}): Promise<Article[]> => {
-  const { categorySlug, excludeArticleId, limit = 12, offset = 0 } = options;
+  const { categorySlug, excludeArticleId, limit = 12, offset = 0, searchQuery } = options;
 
   const baseFilter = `
     _type == "article"
@@ -54,13 +74,17 @@ export const getArticles = async (options: ListArticlesParams = {}): Promise<Art
   `;
 
   const categoryFilter = categorySlug ? '&& $categorySlug in categories[]->slug.current' : '';
+  const searchFilter = searchQuery ? createSearchFilter(searchQuery) : '';
 
   const query = `*[
     ${baseFilter}
     ${categoryFilter}
+    ${searchFilter}
   ] | order(publishedAt desc) [${offset}...${offset + limit}]{
     ${ARTICLE_PROJECTION}
   }`;
+
+  console.log(query);
 
   const params: Record<string, unknown> = {};
   if (excludeArticleId) params.excludeArticleId = excludeArticleId;

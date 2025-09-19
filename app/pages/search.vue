@@ -1,25 +1,50 @@
 <script setup lang="ts">
 import { getArticles, getImage } from '@/sanity-client';
+import type { Article } from '~/types/sanity';
+import { useRouter } from 'vue-router';
 
-const { data: articles } = await useList('articles', () => getArticles());
+const router = useRouter();
+const articles: Ref<Article[]> = ref([]);
+const inputSearch = ref('');
+const searchQuery = ref('');
+
+const handleSearch = async () => {
+  searchQuery.value = cleanQuery(inputSearch.value);
+  const queryParams = new URLSearchParams({ q: searchQuery.value });
+  router.push(`?${queryParams.toString()}`);
+};
+
+watchEffect(async () => {
+  articles.value = await getArticles({ searchQuery: searchQuery.value });
+});
 
 const primaryArticles = computed(() => articles.value.slice(0, 2));
 const otherArticles = computed(() => articles.value.slice(2));
 
 const showTitles = computed(() => primaryArticles.value.length > 0 && otherArticles.value.length > 0);
+
+function cleanQuery(query: string) {
+  return query.trim().replace(/\s+/g, ' ');
+}
 </script>
 
 <template>
-  <div
-    class="relative flex items-center border-b border-(--fg)/30 text-xl text-(--fg)/70 transition duration-150 focus-within:border-(--fg)/60 focus-within:text-(--fg)"
+  <form
+    class="relative flex items-center border-b border-(--fg)/50 text-xl text-(--fg)/50 transition duration-150 focus-within:border-(--fg)/75 focus-within:text-(--fg)"
+    role="search"
+    @submit.prevent="handleSearch"
   >
     <input
-      class="w-full px-2 py-2 pr-12 text-(--fg) outline-none placeholder:text-(--fg)/70"
+      type="search"
       placeholder="Search"
-      type="text"
+      aria-label="Search articles"
+      class="w-full py-2 pr-12 pl-2 font-medium text-(--fg) outline-none placeholder:text-(--fg)/50"
+      v-model="inputSearch"
     />
-    <PhosphorIcon name="key-return" class="absolute right-2 text-[1.25em]" weight="fill" />
-  </div>
+    <button type="submit" class="absolute right-2 cursor-pointer p-1 text-[1.25em]">
+      <PhosphorIcon name="key-return" weight="fill" />
+    </button>
+  </form>
 
   <section v-if="primaryArticles.length" aria-labelledby="featured-heading" class="mt-8 space-y-4">
     <h1 v-if="showTitles">À la une</h1>

@@ -22,18 +22,20 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="brandRef" class="flex justify-center">
-    <NuxtLink
-      to="/"
-      aria-label="Accueil"
-      title="Accueil"
-      class="m-4 block px-1 text-center text-3xl font-bold text-(--fg)/90"
-    >
-      Papela
-    </NuxtLink>
-  </div>
+  <header class="px-4">
+    <div ref="brandRef" class="flex justify-center">
+      <NuxtLink
+        to="/"
+        aria-label="Accueil"
+        title="Accueil"
+        class="m-4 block px-1 text-center text-3xl font-bold text-(--fg)/90"
+      >
+        Papela
+      </NuxtLink>
+    </div>
 
-  <Nav :show-brand="showNavBrand" />
+    <Nav :show-brand="showNavBrand" />
+  </header>
 
   <main class="container mx-auto max-w-5xl p-4">
     <NuxtPage />
