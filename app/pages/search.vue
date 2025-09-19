@@ -5,6 +5,8 @@ const { data: articles } = await useList('articles', () => getArticles());
 
 const primaryArticles = computed(() => articles.value.slice(0, 2));
 const otherArticles = computed(() => articles.value.slice(2));
+
+const showTitles = computed(() => primaryArticles.value.length > 0 && otherArticles.value.length > 0);
 </script>
 
 <template>
@@ -19,33 +21,43 @@ const otherArticles = computed(() => articles.value.slice(2));
     <PhosphorIcon name="key-return" class="absolute right-2 text-[1.25em]" weight="fill" />
   </div>
 
-  <div class="mt-8 flex flex-col gap-8">
-    <ArticleHorizontal
-      as="h2"
-      v-for="article in primaryArticles"
-      :key="article._id"
-      :id="article._id"
-      :url="`/article/${article.slug.current}`"
-      :title="article.title"
-      :category="article.categories?.[0]?.title"
-      :date="article.publishedAt"
-      :image="getImage(article.image).url()"
-      :alt="article.title"
-      :excerpt="article.excerpt"
-    />
+  <section v-if="primaryArticles.length" aria-labelledby="featured-heading" class="mt-8 space-y-4">
+    <h1 v-if="showTitles">À la une</h1>
 
-    <ArticleHorizontal
-      as="h3"
-      v-for="article in otherArticles"
-      :key="article._id"
-      :id="article._id"
-      :url="`/article/${article.slug.current}`"
-      :title="article.title"
-      :category="article.categories?.[0]?.title"
-      :date="article.publishedAt"
-      :image="getImage(article.image).url()"
-      :alt="article.title"
-      :excerpt="article.excerpt"
-    />
-  </div>
+    <ul role="list" class="space-y-8">
+      <li v-for="article in primaryArticles" :key="article._id">
+        <ArticleHorizontal
+          as="h2"
+          :id="article._id"
+          :url="`/article/${article.slug.current}`"
+          :title="article.title"
+          :category="article.categories?.[0]?.title"
+          :date="article.publishedAt"
+          :image="getImage(article.image).url()"
+          :alt="article.title"
+          :excerpt="article.excerpt"
+        />
+      </li>
+    </ul>
+  </section>
+
+  <section v-if="otherArticles.length" aria-labelledby="more-heading" class="mt-8 space-y-4">
+    <h2 v-if="showTitles">Plus d’articles</h2>
+
+    <ul role="list" class="space-y-8">
+      <li v-for="article in otherArticles" :key="article._id">
+        <ArticleHorizontal
+          as="h3"
+          :id="article._id"
+          :url="`/article/${article.slug.current}`"
+          :title="article.title"
+          :category="article.categories?.[0]?.title"
+          :date="article.publishedAt"
+          :image="getImage(article.image).url()"
+          :alt="article.title"
+          :excerpt="article.excerpt"
+        />
+      </li>
+    </ul>
+  </section>
 </template>

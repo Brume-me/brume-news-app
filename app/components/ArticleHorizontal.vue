@@ -25,19 +25,17 @@ const displayDate = computed(() =>
 </script>
 
 <template>
-  <NuxtLink
-    :to="props.url"
-    class="outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-    :aria-labelledby="titleId"
-    :aria-describedby="metaId"
-    itemprop="url"
-  >
-    <article class="article-card grid grid-cols-[11rem_1fr] gap-3" itemscope itemtype="https://schema.org/NewsArticle">
+  <NuxtLink :to="props.url" class="block" :aria-labelledby="titleId" :aria-describedby="metaId" itemprop="url">
+    <article
+      class="article-card grid grid-cols-[8rem_1fr] gap-4 md:grid-cols-[14rem_1fr]"
+      itemscope
+      itemtype="https://schema.org/NewsArticle"
+    >
       <figure>
         <img
           :src="props.image"
           :alt="props.alt || props.title"
-          class="h-full min-h-28 object-cover"
+          class="aspect-[3/2] h-full w-full object-cover"
           width="600"
           height="400"
           loading="lazy"

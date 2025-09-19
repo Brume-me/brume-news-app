@@ -12,7 +12,7 @@ const selectedTheme = computed(() => themes.find((t) => t.value === currentTheme
 </script>
 
 <template>
-  <button @click="nextTheme" class="cursor-pointer p-2">
+  <button @click="nextTheme" class="focus-ring cursor-pointer p-2">
     <PhosphorIcon :name="selectedTheme.icon" class="text-lg" weight="fill" />
   </button>
 </template>

@@ -127,3 +127,7 @@ h3 {
 h4 {
   @apply text-base font-semibold md:text-lg;
 }
+
+ a, .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg);
+  }

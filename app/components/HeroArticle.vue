@@ -28,13 +28,7 @@ const displayDate = computed(() =>
 
 <template>
   <article class="article-card relative" itemscope itemtype="https://schema.org/NewsArticle">
-    <NuxtLink
-      :to="props.url"
-      class="block outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-      :aria-labelledby="titleId"
-      :aria-describedby="metaId"
-      itemprop="url"
-    >
+    <NuxtLink :to="props.url" class="block" :aria-labelledby="titleId" :aria-describedby="metaId" itemprop="url">
       <figure class="relative overflow-hidden">
         <div class="aspect-[16/9] min-h-96 w-full">
           <img
