@@ -75,12 +75,13 @@ export const getTopCategories = async (): Promise<Category[]> => {
     title,
     slug,
     "articleCount": count(*[
-      _type == "article" 
+      _type == "article"
       && defined(slug.current)
       && !(_id in path("drafts.**"))
-      && references(^._id)
+      && ^._id in categories[]._ref
     ])
-  } | order(articleCount desc, title asc)[0...8]`;
+  }[articleCount > 0]
+  | order(articleCount desc, title asc)[0...8]`;
 
   return client.fetch<Category[]>(query);
 };
