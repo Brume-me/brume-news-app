@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getArticles, getImage } from '@/sanity-client';
+import { getImage, getSearchResults } from '@/sanity-client';
 import type { Article } from '~/types/sanity';
-import { useRouter } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
 const articles: Ref<Article[]> = ref([]);
 const inputSearch = ref('');
@@ -14,14 +14,16 @@ const handleSearch = async () => {
   router.push(`?${queryParams.toString()}`);
 };
 
-watchEffect(async () => {
-  articles.value = await getArticles({ searchQuery: searchQuery.value });
+onMounted(() => {
+  if (route.query.q) {
+    searchQuery.value = route.query.q as string;
+    inputSearch.value = searchQuery.value;
+  }
 });
 
-const primaryArticles = computed(() => articles.value.slice(0, 2));
-const otherArticles = computed(() => articles.value.slice(2));
-
-const showTitles = computed(() => primaryArticles.value.length > 0 && otherArticles.value.length > 0);
+watchEffect(async () => {
+  articles.value = await getSearchResults({ searchQuery: searchQuery.value });
+});
 
 function cleanQuery(query: string) {
   return query.trim().replace(/\s+/g, ' ');
@@ -46,33 +48,13 @@ function cleanQuery(query: string) {
     </button>
   </form>
 
-  <section v-if="primaryArticles.length" aria-labelledby="featured-heading" class="mt-8 space-y-4">
-    <h1 v-if="showTitles">À la une</h1>
+  <section v-if="articles.length" class="mt-8 space-y-4">
+    <h1>Résultats</h1>
 
     <ul role="list" class="space-y-8">
-      <li v-for="article in primaryArticles" :key="article._id">
+      <li v-for="article in articles" :key="article._id">
         <ArticleHorizontal
           as="h2"
-          :id="article._id"
-          :url="`/article/${article.slug.current}`"
-          :title="article.title"
-          :category="article.categories?.[0]?.title"
-          :date="article.publishedAt"
-          :image="getImage(article.image).url()"
-          :alt="article.title"
-          :excerpt="article.excerpt"
-        />
-      </li>
-    </ul>
-  </section>
-
-  <section v-if="otherArticles.length" aria-labelledby="more-heading" class="mt-8 space-y-4">
-    <h2 v-if="showTitles">Plus d’articles</h2>
-
-    <ul role="list" class="space-y-8">
-      <li v-for="article in otherArticles" :key="article._id">
-        <ArticleHorizontal
-          as="h3"
           :id="article._id"
           :url="`/article/${article.slug.current}`"
           :title="article.title"
