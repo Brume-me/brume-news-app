@@ -5,8 +5,8 @@ import type { Article } from '~/types/sanity';
 const route = useRoute();
 const router = useRouter();
 const articles: Ref<Article[]> = ref([]);
+const searchQuery: Ref<string | undefined> = ref();
 const inputSearch = ref('');
-const searchQuery = ref('');
 
 const handleSearch = async () => {
   searchQuery.value = cleanQuery(inputSearch.value);
@@ -22,7 +22,7 @@ onMounted(() => {
 });
 
 watchEffect(async () => {
-  articles.value = await getSearchResults({ searchQuery: searchQuery.value });
+  if (searchQuery.value) articles.value = await getSearchResults({ searchQuery: searchQuery.value });
 });
 
 function cleanQuery(query: string) {

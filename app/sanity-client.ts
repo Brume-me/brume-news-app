@@ -47,7 +47,7 @@ interface GetArticlesParams extends GetParams {
   excludeArticleId?: string;
 }
 
-export const getArticles = async (options: GetArticlesParams): Promise<Article[]> => {
+export const getArticles = async (options: GetArticlesParams = {}): Promise<Article[]> => {
   const { categorySlug, excludeArticleId, limit = 12, offset = 0 } = options;
 
   const baseFilter = `
@@ -80,7 +80,8 @@ interface GetSearchResultParams {
 }
 
 export const getSearchResults = async (options: GetSearchResultParams): Promise<Article[]> => {
-  if (!options.searchQuery || !options.searchQuery.length) return [];
+  console.log('coco');
+  if (!options.searchQuery.length) return [];
 
   const { searchQuery, limit = 12, offset = 0 } = options;
 
