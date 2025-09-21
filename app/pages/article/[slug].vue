@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { getArticle, getArticles, getImage } from '@/sanity-client';
+import { type Vote, addArticleVote, getArticleVotes } from '~/api/votes';
 import { toHTML } from '@portabletext/to-html';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { useRoute } from 'nuxt/app';
 
 const route = useRoute();
@@ -32,12 +34,37 @@ const displayDate = computed(() =>
     year: 'numeric'
   })
 );
+
+const { data: votes } = useQuery({
+  queryKey: ['article-votes', article.value._id],
+  queryFn: () => getArticleVotes(article.value._id, 'TotoBobo'),
+  enabled: !!article.value._id,
+  staleTime: 30_000
+});
+
+const queryClient = useQueryClient();
+
+const voteMutation = useMutation({
+  mutationFn: (vote?: Vote) => addArticleVote(article.value._id, 'TotoBobo', vote),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['article-votes', article.value._id] });
+  }
+});
+
+const handleVote = (vote: Vote) => {
+  if (votes.value?.userVote === vote) {
+    voteMutation.mutate(undefined);
+  } else {
+    voteMutation.mutate(vote);
+  }
+};
 </script>
 
 <template>
   <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[60ch]">
     <header class="mb-8 md:mb-16">
-      <figure>
+      <button @click="voteMutation.mutate('upvote')">Upvote</button>
+      <!-- <figure>
         <img
           v-if="article.image"
           :src="getImage(article.image).width(1200).height(700).url()"
@@ -48,7 +75,7 @@ const displayDate = computed(() =>
           fetchpriority="high"
         />
         <figcaption>{{ article.imageCaption }}</figcaption>
-      </figure>
+      </figure> -->
 
       <h1 class="text-3xl! md:text-4xl!">{{ article.title }}</h1>
 
@@ -65,17 +92,27 @@ const displayDate = computed(() =>
       </p>
     </header>
 
-    <main v-html="toHTML(article.body)"></main>
+    <!-- <main v-html="toHTML(article.body)"></main> -->
 
-    <footer class="flex gap-2">
-      <button class="group flex cursor-pointer items-center gap-0.5">
-        <PhosphorIcon name="arrow-fat-up" weight="fill" class="text-2xl group-hover:hidden" />
-        <PhosphorIcon name="arrow-fat-up" weight="fill" class="text-2xl group-[:not(:hover)]:hidden" /> 1.5k
+    <footer v-if="votes" class="flex gap-4">
+      <button class="focus-ring group flex cursor-pointer items-center gap-0.5" @click="handleVote('upvote')">
+        <PhosphorIcon
+          name="arrow-fat-up"
+          weight="fill"
+          class="text-2xl"
+          :class="votes.userVote === 'upvote' ? 'text-(--fg)' : 'text-(--fg)/60'"
+        />
+        {{ votes.upvotes }}
       </button>
 
-      <button class="group flex cursor-pointer items-center gap-0.5">
-        <PhosphorIcon name="arrow-fat-down" weight="fill" class="text-2xl group-hover:hidden" />
-        <PhosphorIcon name="arrow-fat-down" weight="fill" class="text-2xl group-[:not(:hover)]:hidden" /> 140
+      <button class="focus-ring group flex cursor-pointer items-center gap-0.5" @click="handleVote('downvote')">
+        <PhosphorIcon
+          name="arrow-fat-down"
+          weight="fill"
+          class="g text-2xl"
+          :class="votes.userVote === 'downvote' ? 'text-(--fg)' : 'text-(--fg)/60'"
+        />
+        {{ votes.downvotes }}
       </button>
     </footer>
   </article>
