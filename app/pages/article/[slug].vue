@@ -63,8 +63,7 @@ const handleVote = (vote: Vote) => {
 <template>
   <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[60ch]">
     <header class="mb-8 md:mb-16">
-      <button @click="voteMutation.mutate('upvote')">Upvote</button>
-      <!-- <figure>
+      <figure>
         <img
           v-if="article.image"
           :src="getImage(article.image).width(1200).height(700).url()"
@@ -75,7 +74,7 @@ const handleVote = (vote: Vote) => {
           fetchpriority="high"
         />
         <figcaption>{{ article.imageCaption }}</figcaption>
-      </figure> -->
+      </figure>
 
       <h1 class="text-3xl! md:text-4xl!">{{ article.title }}</h1>
 
@@ -92,7 +91,7 @@ const handleVote = (vote: Vote) => {
       </p>
     </header>
 
-    <!-- <main v-html="toHTML(article.body)"></main> -->
+    <main v-html="toHTML(article.body)"></main>
 
     <footer v-if="votes" class="flex gap-4">
       <button class="focus-ring group flex cursor-pointer items-center gap-0.5" @click="handleVote('upvote')">
