@@ -42,58 +42,59 @@
   --color-red-800: oklch(32.49% 0.113 17.99);
   --color-red-900: oklch(23.44% 0.082 17.32);
   --color-red-950: oklch(18.51% 0.065 16.91);
+
+  --base-gap: 1rem;
 }
 
-
-:root{
-  --bg:#ffffff;
-  --fg:#0a0a0a;
-  --surface:#f6f7f9;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-  --accent:#1D4ED8;
-  --accent-fg:#ffffff;
-  --link:var(--accent);
+:root {
+  --bg: #ffffff;
+  --fg: #0a0a0a;
+  --surface: #f6f7f9;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #1d4ed8;
+  --accent-fg: #ffffff;
+  --link: var(--accent);
 }
 
-:root[data-theme="dark"]{
-  --bg:#000000;
-  --fg:#ffffff;
-  --surface:#0b0b0b;
-  --muted:#c0c5cc;
-  --border:#1f2937;
-  --accent:#60A5FA;
-  --accent-fg:#0a0a0a;
-  --link:var(--accent);
+:root[data-theme='dark'] {
+  --bg: #000000;
+  --fg: #ffffff;
+  --surface: #0b0b0b;
+  --muted: #c0c5cc;
+  --border: #1f2937;
+  --accent: #60a5fa;
+  --accent-fg: #0a0a0a;
+  --link: var(--accent);
 }
 
-:root[data-theme="beige"]{
-  --bg:#f5efe6;
-  --fg:#2a2520;
-  --surface:#f8f2e9;
-  --muted:#6b5e55;
-  --border:#e7dfd4;
-  --accent:#1D4ED8;
-  --accent-fg:#ffffff;
-  --link:var(--accent);
+:root[data-theme='beige'] {
+  --bg: #f5efe6;
+  --fg: #2a2520;
+  --surface: #f8f2e9;
+  --muted: #6b5e55;
+  --border: #e7dfd4;
+  --accent: #1d4ed8;
+  --accent-fg: #ffffff;
+  --link: var(--accent);
 }
 
-:root[data-theme="graphite"]{
-  --bg:#14161a;
-  --fg:#f5f7fa;
-  --surface:#0f1216;
-  --muted:#b3bcc7;
-  --border:#22262c;
-  --accent:#60A5FA;
-  --accent-fg:#0a0a0a;
-  --link:var(--accent);
+:root[data-theme='graphite'] {
+  --bg: #14161a;
+  --fg: #f5f7fa;
+  --surface: #0f1216;
+  --muted: #b3bcc7;
+  --border: #22262c;
+  --accent: #60a5fa;
+  --accent-fg: #0a0a0a;
+  --link: var(--accent);
 }
 
-body, #__nuxt {
+body,
+#__nuxt {
   color: var(--fg);
   background-color: var(--bg);
 }
-
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -128,6 +129,7 @@ h4 {
   @apply text-base font-semibold md:text-lg;
 }
 
- a, .focus-ring {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg);
-  }
+a,
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg);
+}

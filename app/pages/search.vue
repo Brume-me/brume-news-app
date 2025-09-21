@@ -51,7 +51,7 @@ function cleanQuery(query: string) {
   <section v-if="articles.length" class="mt-8 space-y-4">
     <h1>Résultats</h1>
 
-    <ul role="list" class="space-y-8">
+    <ol class="space-y-(--base-gap)">
       <li v-for="article in articles" :key="article._id">
         <ArticleHorizontal
           as="h2"
@@ -65,6 +65,6 @@ function cleanQuery(query: string) {
           :excerpt="article.excerpt"
         />
       </li>
-    </ul>
+    </ol>
   </section>
 </template>

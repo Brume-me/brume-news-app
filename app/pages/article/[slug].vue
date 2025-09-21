@@ -83,7 +83,7 @@ const displayDate = computed(() =>
   <nav v-if="categoryArticles.length" aria-labelledby="category-read-list" class="mb-8">
     <h2 id="category-read-list" class="mb-4">Dans la même catégorie</h2>
 
-    <ul class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <ul class="grid grid-cols-1 gap-(--base-gap) md:grid-cols-2 lg:grid-cols-3">
       <li v-for="article in categoryArticles">
         <ArticleCard
           as="h3"
@@ -103,7 +103,7 @@ const displayDate = computed(() =>
   <nav aria-labelledby="flash-read-list">
     <h2 id="flash-read-list" class="mb-4">À la une</h2>
 
-    <ul class="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
+    <ul class="grid grid-cols-1 gap-(--base-gap) md:grid-cols-3 lg:grid-cols-4">
       <li v-for="article in flashArticles">
         <ArticleCard
           as="h3"

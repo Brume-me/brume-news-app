@@ -8,7 +8,7 @@ const categorySlug = route.params.slug as string;
 const { data: articles } = await useList(`category-articles:${categorySlug}`, () => getArticles({ categorySlug }));
 
 const heroArticle = computed(() => articles.value[0]);
-const secondaryArticles = computed(() => articles.value.slice(1, 3));
+const asideArticles = computed(() => articles.value.slice(1, 3));
 const otherArticles = computed(() => articles.value.slice(3));
 
 if (!articles.value?.length) {
@@ -17,10 +17,10 @@ if (!articles.value?.length) {
 </script>
 
 <template>
-  <section class="grid gap-8 sm:grid-cols-3" v-if="articles">
-    <ArticleCard
+  <section class="mb-16 grid grid-cols-[3fr_1fr] gap-(--base-gap)" v-if="articles">
+    <!-- <ArticleCard
       as="h1"
-      class="expanded col-span-2"
+      class="max-md:col-span-2"
       v-if="heroArticle"
       :key="heroArticle._id"
       :id="heroArticle._id"
@@ -30,13 +30,27 @@ if (!articles.value?.length) {
       :date="heroArticle.publishedAt"
       :image="getImage(heroArticle.image).url()"
       :alt="heroArticle.title"
+      :excerpt="heroArticle.excerpt"
+    /> -->
+
+    <HeroArticle
+      v-if="heroArticle"
+      class="h-full max-md:col-span-2"
+      :key="heroArticle._id"
+      :id="heroArticle._id"
+      :url="`/article/${heroArticle.slug.current}`"
+      :title="heroArticle.title"
+      :category="heroArticle.categories?.[0]?.title"
+      :date="heroArticle.publishedAt"
+      :image="getImage(heroArticle.image).url()"
+      :alt="heroArticle.title"
+      :excerpt="heroArticle.excerpt"
     />
 
-    <aside class="flex flex-col gap-4">
+    <aside class="grid gap-(--base-gap) max-md:col-span-2 max-md:grid-cols-2">
       <ArticleCard
         as="h3"
-        v-for="(article, index) in secondaryArticles"
-        :class="{ 'col-span-2': index === 0 }"
+        v-for="(article, index) in asideArticles"
         :key="article._id"
         :id="article._id"
         :url="`/article/${article.slug.current}`"
@@ -47,11 +61,12 @@ if (!articles.value?.length) {
         :alt="article.title"
       />
     </aside>
+  </section>
 
+  <section class="grid gap-(--base-gap) sm:grid-cols-3" v-if="otherArticles">
     <ArticleCard
-      as="h2"
+      as="h3"
       v-for="(article, index) in otherArticles"
-      :class="{ 'col-span-2': index === 0 }"
       :key="article._id"
       :id="article._id"
       :url="`/article/${article.slug.current}`"
@@ -61,32 +76,5 @@ if (!articles.value?.length) {
       :image="getImage(article.image).url()"
       :alt="article.title"
     />
-
-    <!-- <ArticleCard
-      as="h1"
-      v-if="heroArticle"
-      class="col-span-2"
-      :key="heroArticle._id"
-      :id="heroArticle._id"
-      :url="`/article/${heroArticle.slug.current}`"
-      :title="heroArticle.title"
-      :category="heroArticle.categories?.[0]?.title"
-      :date="heroArticle.publishedAt"
-      :image="getImage(heroArticle.image).url()"
-      :alt="heroArticle.title"
-    /> -->
-
-    <!-- <ArticleCard
-      as="h2"
-      v-for="article in otherArticles"
-      :key="article._id"
-      :id="article._id"
-      :url="`/article/${article.slug.current}`"
-      :title="article.title"
-      :category="article.categories?.[0]?.title"
-      :date="article.publishedAt"
-      :image="getImage(article.image).url()"
-      :alt="article.title"
-    /> -->
   </section>
 </template>

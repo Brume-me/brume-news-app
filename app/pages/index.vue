@@ -9,9 +9,10 @@ const otherArticles = computed(() => articles.value.slice(3));
 </script>
 
 <template>
-  <section v-if="articles?.length" class="flex flex-col gap-8">
+  <section v-if="articles?.length" class="mb-16 grid grid-cols-1 gap-(--base-gap) sm:grid-cols-2">
     <HeroArticle
       v-if="heroArticle"
+      class="sm:col-span-2"
       :key="heroArticle._id"
       :id="heroArticle._id"
       :url="`/article/${heroArticle.slug.current}`"
@@ -23,34 +24,32 @@ const otherArticles = computed(() => articles.value.slice(3));
       :excerpt="heroArticle.excerpt"
     />
 
-    <section class="grid gap-4 sm:grid-cols-2" v-if="secondaryArticles.length">
-      <ArticleCard
-        as="h2"
-        v-for="article in secondaryArticles"
-        :key="article._id"
-        :id="article._id"
-        :url="`/article/${article.slug.current}`"
-        :title="article.title"
-        :category="article.categories?.[0]?.title"
-        :date="article.publishedAt"
-        :image="getImage(article.image).url()"
-        :alt="article.title"
-      />
-    </section>
+    <ArticleCard
+      as="h2"
+      v-for="article in secondaryArticles"
+      :key="article._id"
+      :id="article._id"
+      :url="`/article/${article.slug.current}`"
+      :title="article.title"
+      :category="article.categories?.[0]?.title"
+      :date="article.publishedAt"
+      :image="getImage(article.image).url()"
+      :alt="article.title"
+    />
+  </section>
 
-    <section class="grid grid-cols-2 gap-4 sm:grid-cols-3" v-if="otherArticles.length">
-      <ArticleCard
-        as="h3"
-        v-for="article in otherArticles"
-        :key="article._id"
-        :id="article._id"
-        :url="`/article/${article.slug.current}`"
-        :title="article.title"
-        :category="article.categories?.[0]?.title"
-        :date="article.publishedAt"
-        :image="getImage(article.image).url()"
-        :alt="article.title"
-      />
-    </section>
+  <section class="grid grid-cols-1 gap-(--base-gap) sm:grid-cols-2 md:grid-cols-3" v-if="otherArticles.length">
+    <ArticleCard
+      as="h3"
+      v-for="article in otherArticles"
+      :key="article._id"
+      :id="article._id"
+      :url="`/article/${article.slug.current}`"
+      :title="article.title"
+      :category="article.categories?.[0]?.title"
+      :date="article.publishedAt"
+      :image="getImage(article.image).url()"
+      :alt="article.title"
+    />
   </section>
 </template>
