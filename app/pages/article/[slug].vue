@@ -61,7 +61,7 @@ const handleVote = (vote: Vote) => {
 </script>
 
 <template>
-  <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-[60ch]">
+  <article v-if="article" class="prose dark:prose-invert md:prose-lg lg:prose-xl mx-auto mb-16 max-w-2xl">
     <header class="mb-8 md:mb-16">
       <figure>
         <img
@@ -115,6 +115,8 @@ const handleVote = (vote: Vote) => {
       </button>
     </footer>
   </article>
+
+  <CommentList class="mx-auto mb-16 max-w-2xl" />
 
   <nav v-if="categoryArticles.length" aria-labelledby="category-read-list" class="mb-8">
     <h2 id="category-read-list" class="mb-4">Dans la même catégorie</h2>
