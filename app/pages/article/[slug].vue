@@ -129,7 +129,7 @@ const handleVote = (vote: Vote) => {
         v-model="content"
         rows="4"
         placeholder="Écrire un commentaire…"
-        class="focus-ring w-full resize-none border px-3 py-2 pr-10 placeholder-(--fg)/40"
+        class="focus-ring w-full resize-none border border-(--fg)/50 px-3 py-2 pr-10 placeholder-(--fg)/50 focus:border-(--fg)"
       ></textarea>
 
       <div class="flex justify-end">
