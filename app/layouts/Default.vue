@@ -33,9 +33,9 @@ onBeforeUnmount(() => {
         Papela
       </NuxtLink>
     </div>
-
-    <Nav :show-brand="showNavBrand" />
   </header>
+
+  <Nav :show-brand="showNavBrand" />
 
   <main class="container mx-auto max-w-5xl p-4">
     <NuxtPage />
