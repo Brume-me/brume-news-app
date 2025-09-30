@@ -116,7 +116,33 @@ const handleVote = (vote: Vote) => {
     </footer>
   </article>
 
-  <CommentList class="mx-auto mb-16 max-w-2xl" />
+  <section aria-labelledby="comments-title" class="mx-auto mb-16 max-w-2xl">
+    <h2 id="comments-title" class="mb-4">Commentaires</h2>
+
+    <CommentList class="mb-8" />
+
+    <form @submit.prevent="onSubmit" class="flex flex-col gap-3">
+      <label for="comment" class="font-medium"> Ajouter un commentaire </label>
+
+      <textarea
+        id="comment"
+        v-model="content"
+        rows="4"
+        placeholder="Écrire un commentaire…"
+        class="focus-ring w-full resize-none border px-3 py-2 pr-10 placeholder-(--fg)/40"
+      ></textarea>
+
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="focus-ring inline-flex items-center gap-2 bg-(--fg) px-2 py-1.5 font-semibold text-(--bg) hover:bg-(--fg)/90"
+        >
+          <PhosphorIcon name="chat-text" weight="fill" class="h-4 w-4" />
+          Publier
+        </button>
+      </div>
+    </form>
+  </section>
 
   <nav v-if="categoryArticles.length" aria-labelledby="category-read-list" class="mb-8">
     <h2 id="category-read-list" class="mb-4">Dans la même catégorie</h2>
