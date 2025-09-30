@@ -37,7 +37,7 @@ const displayDate = computed(() =>
 
 const { data: votes } = useQuery({
   queryKey: ['article-votes', article.value._id],
-  queryFn: () => getArticleVotes(article.value._id, 'TotoBobo'),
+  queryFn: () => getArticleVotes(article.value._id),
   enabled: !!article.value._id,
   staleTime: 30_000
 });
@@ -45,7 +45,7 @@ const { data: votes } = useQuery({
 const queryClient = useQueryClient();
 
 const voteMutation = useMutation({
-  mutationFn: (vote?: Vote) => addArticleVote(article.value._id, 'TotoBobo', vote),
+  mutationFn: (vote?: Vote) => addArticleVote(article.value._id, vote),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['article-votes', article.value._id] });
   }
